@@ -58,7 +58,7 @@
         android:textSize="12sp"
         android:padding="8dp"
         android:layout_below="@+id/password"
-        android:text="Password"
+        android:text="Remember Password"
         android:textColor="@color/colorPrimary" />
 
     <Button
