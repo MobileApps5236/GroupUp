@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#66383838"
-    tools:context="com.example.tonyrobb.groupup.Login"
-    android:theme="@style/AppTheme">
+    android:background="@android:color/background_light"
+    android:theme="@style/AppTheme"
+    tools:context="com.example.tonyrobb.groupup.Login">
 
 
     <TextView
@@ -16,7 +16,7 @@
         android:padding="10dp"
         android:text="Login"
         android:textAlignment="center"
-        android:textColor="#803996"
+        android:textColor="@android:color/background_dark"
         android:textSize="40sp" />
 
     <EditText
@@ -53,42 +53,54 @@
         android:id="@+id/checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart = "50dp"
-        android:layout_marginLeft="50dp"
-        android:textSize="12sp"
-        android:padding="8dp"
         android:layout_below="@+id/password"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:padding="8dp"
         android:text="Remember Password"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp" />
 
     <Button
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/btnLogin"
-        android:layout_marginStart="50dp"
+        android:layout_below="@+id/checkbox"
+        android:layout_centerHorizontal="true"
         android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:enabled="true"
-        android:textColor="#f7f7f7"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/checkbox"
+        android:text="Login"
+        android:textColor="@android:color/background_dark"
         android:theme="@style/AppTheme" />
 
     <TextView
         android:id="@+id/forgot_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight = "4dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|start"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
         android:clickable="true"
         android:gravity="start|center_horizontal"
         android:text="Forgot Password"
         android:textAlignment="gravity"
         android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:id="@+id/btnCreateAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btnLogin"
+        android:layout_alignLeft="@+id/btnLogin"
+        android:layout_alignRight="@+id/btnLogin"
+        android:layout_alignStart="@+id/btnLogin"
+        android:layout_below="@+id/btnLogin"
+        android:text="Create A New Account"
+        android:textColor="@android:color/background_dark" />
 </RelativeLayout>
