@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "356542696870",
+    "firebase_url": "https://groupup-81dd6.firebaseio.com",
+    "project_id": "groupup-81dd6",
+    "storage_bucket": "groupup-81dd6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356542696870:android:795f2967f4d397af",
+        "android_client_info": {
+          "package_name": "com.example.tonyrobb.groupup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356542696870-dtaf7f2f9bf6oqf3oqd9n49n7uqkutsi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKxJEZT8KHhmGh4aQLsyBEOVv0iifY4ZA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
