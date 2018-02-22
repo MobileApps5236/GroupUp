@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "356542696870",
-    "firebase_url": "https://groupup-81dd6.firebaseio.com",
-    "project_id": "groupup-81dd6",
-    "storage_bucket": "groupup-81dd6.appspot.com"
+    "project_number": "1009420356711",
+    "firebase_url": "https://groupup-cc709.firebaseio.com",
+    "project_id": "groupup-cc709",
+    "storage_bucket": "groupup-cc709.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:356542696870:android:795f2967f4d397af",
+        "mobilesdk_app_id": "1:1009420356711:android:795f2967f4d397af",
         "android_client_info": {
           "package_name": "com.example.tonyrobb.groupup"
         }
       },
       "oauth_client": [
         {
-          "client_id": "356542696870-dtaf7f2f9bf6oqf3oqd9n49n7uqkutsi.apps.googleusercontent.com",
+          "client_id": "1009420356711-4uu2e4591j0d5be24hmqhjjkmo1jt6du.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBKxJEZT8KHhmGh4aQLsyBEOVv0iifY4ZA"
+          "current_key": "AIzaSyAGEKJbdlIT3Sg5ChP47n0h8B17fxtOc34"
         }
       ],
       "services": {
