@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GroupUp</string>
+    <string name="title_activity_create_account">CreateAccount</string>
+    <string name="action_settings">Settings</string>
 </resources>
