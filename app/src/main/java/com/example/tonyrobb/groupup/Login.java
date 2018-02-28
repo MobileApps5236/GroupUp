@@ -17,6 +17,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
+import android.util.Log;
+
 
 public class Login extends AppCompatActivity {
 
@@ -58,6 +60,8 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        Button loginBtn = findViewById(R.id.btnLogin);
+        Log.v("TAG", "onCreate triggered");
         loginBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -96,10 +100,24 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.v("TAG", "onPause triggered");
+    }
 
 
 
     private static void loginOperation(){
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Log.v("TAG","onResume triggered");
+    }
 
+    private void loginOperation(String username, String password){
+        Intent intent = new Intent(getApplicationContext(), MainPage.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
     }
 }
