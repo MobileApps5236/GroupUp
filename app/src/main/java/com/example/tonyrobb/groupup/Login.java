@@ -16,14 +16,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.w3c.dom.Text;
 import android.util.Log;
 
 
 public class Login extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword;
-    private Button btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
 
@@ -60,7 +58,6 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        Button loginBtn = findViewById(R.id.btnLogin);
         Log.v("TAG", "onCreate triggered");
         loginBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -106,9 +103,6 @@ public class Login extends AppCompatActivity {
         Log.v("TAG", "onPause triggered");
     }
 
-
-
-    private static void loginOperation(){
     @Override
     protected void onResume(){
         super.onResume();
