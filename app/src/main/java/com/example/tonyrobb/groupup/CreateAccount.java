@@ -42,27 +42,10 @@ public class CreateAccount extends AppCompatActivity {
         //    }
         //});
 
-        Button btnSignIn = (Button) findViewById(R.id.sign_in_button);
         Button btnSignUp = (Button) findViewById(R.id.sign_up_button);
         final EditText inputEmail = (EditText) findViewById(R.id.email);
         final EditText inputPassword = (EditText) findViewById(R.id.password);
         //final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        Button btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
-
-        btnResetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CreateAccount.this, ResetPassword.class);
-                startActivity(intent);
-            }
-        });
-
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         btnSignUp.setOnClickListener((new View.OnClickListener() {
             @Override
@@ -71,12 +54,14 @@ public class CreateAccount extends AppCompatActivity {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
-                if (TextUtils.isEmpty(password)) {
+                if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
-                if (TextUtils.isEmpty(email)) {
+                if (TextUtils.isEmpty(password)) {
                     Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 //progressBar.setVisibility(View.VISIBLE);

@@ -41,7 +41,6 @@ public class Login extends AppCompatActivity {
 
         Button loginBtn = (Button) findViewById(R.id.btnLogin);
         Button btnSignUp = (Button) findViewById(R.id.btnCreateAccount);
-        Button btnReset = (Button) findViewById(R.id.btn_reset_password);
 
         inputEmail = (EditText) findViewById(R.id.username);
         inputPassword = (EditText) findViewById(R.id.password);

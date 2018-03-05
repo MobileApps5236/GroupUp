@@ -76,22 +76,6 @@
         android:textColor="@android:color/background_dark"
         android:theme="@style/AppTheme" />
 
-    <TextView
-        android:id="@+id/forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|start"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:clickable="true"
-        android:gravity="start|center_horizontal"
-        android:text="Forgot Password"
-        android:textAlignment="gravity"
-        android:textColor="@color/colorPrimary" />
-
     <Button
         android:id="@+id/btnCreateAccount"
         android:layout_width="wrap_content"
