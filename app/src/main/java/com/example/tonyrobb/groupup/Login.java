@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,7 +21,6 @@ import android.util.Log;
 public class Login extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword;
-    private ProgressBar progressBar;
     private FirebaseAuth auth;
 
     @Override
@@ -31,13 +29,9 @@ public class Login extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        //if (auth.getCurrentUser() != null) {
-        //    Intent intent = new Intent(Login.this, MainPage.class);
-        //    startActivity(intent);
-        //}
-
         // If user is not logged in then continue as normal
         setContentView(R.layout.activity_login);
+        Log.v("Login", "onCreate triggered");
 
         Button loginBtn = (Button) findViewById(R.id.btnLogin);
         Button btnSignUp = (Button) findViewById(R.id.btnCreateAccount);
@@ -57,7 +51,6 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        Log.v("TAG", "onCreate triggered");
         loginBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -75,7 +68,7 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-                // Time to authenticate user
+                // Authenticate user
                 auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -96,21 +89,16 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onPause() {
         super.onPause();
-        Log.v("TAG", "onPause triggered");
+        Log.v("Login", "onPause triggered");
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        Log.v("TAG","onResume triggered");
-    }
-
-    private void loginOperation(String username, String password){
-        Intent intent = new Intent(getApplicationContext(), MainPage.class);
-        intent.putExtra("username", username);
-        startActivity(intent);
+        Log.v("Login","onResume triggered");
     }
 }
