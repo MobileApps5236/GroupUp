@@ -1,12 +1,14 @@
 package com.example.tonyrobb.groupup;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,7 +22,13 @@ import android.util.Log;
 
 public class Login extends AppCompatActivity {
 
+    private Button loginBtn, btnSignUp;
+    private CheckBox chkboxRememberMe;
     private EditText inputEmail, inputPassword;
+    private String email, password;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+    private Boolean saveLogin;
     private FirebaseAuth auth;
 
     @Override
@@ -33,11 +41,20 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Log.v("Login", "onCreate triggered");
 
-        Button loginBtn = (Button) findViewById(R.id.btnLogin);
-        Button btnSignUp = (Button) findViewById(R.id.btnCreateAccount);
-
+        loginBtn = (Button) findViewById(R.id.btnLogin);
+        btnSignUp = (Button) findViewById(R.id.btnCreateAccount);
+        chkboxRememberMe = (CheckBox) findViewById(R.id.chkboxRemember);
         inputEmail = (EditText) findViewById(R.id.username);
         inputPassword = (EditText) findViewById(R.id.password);
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+
+        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin == true) {
+            inputEmail.setText(loginPreferences.getString("email", ""));
+            inputPassword.setText(loginPreferences.getString("password", ""));
+            chkboxRememberMe.setChecked(true);
+        }
 
         // Get another instance
         auth = FirebaseAuth.getInstance();
@@ -55,8 +72,8 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                String email = inputEmail.getText().toString();
-                final String password = inputPassword.getText().toString();
+                email = inputEmail.getText().toString();
+                password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address", Toast.LENGTH_SHORT).show();
@@ -80,6 +97,16 @@ public class Login extends AppCompatActivity {
                                         Toast.makeText(Login.this, "Password too short (under 6 characters)", Toast.LENGTH_LONG).show();
                                     }
                                 } else {
+                                    if (chkboxRememberMe.isChecked()) {
+                                        loginPrefsEditor.putBoolean("saveLogin", true);
+                                        loginPrefsEditor.putString("email", email);
+                                        loginPrefsEditor.putString("password", password);
+                                        loginPrefsEditor.commit();
+                                    } else {
+                                        loginPrefsEditor.clear();
+                                        loginPrefsEditor.commit();
+                                    }
+
                                     Intent intent = new Intent(Login.this, MainPage.class);
                                     startActivity(intent);
                                     finish();

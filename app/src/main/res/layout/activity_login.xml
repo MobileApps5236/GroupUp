@@ -50,14 +50,14 @@
         android:textAlignment="center" />
 
     <CheckBox
-        android:id="@+id/checkbox"
+        android:id="@+id/chkboxRemember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/password"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
         android:padding="8dp"
-        android:text="Remember Password"
+        android:text="Remember Me"
         android:textColor="@color/colorPrimary"
         android:textSize="12sp" />
 
