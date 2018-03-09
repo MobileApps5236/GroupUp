@@ -18,6 +18,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class CreateAccount extends AppCompatActivity {
 
+    private Button btnSignUp;
+    EditText inputEmail;
+    EditText inputPassword;
+    EditText inputConfirmPassword;
     private FirebaseAuth auth;
 
     @Override
@@ -28,9 +32,10 @@ public class CreateAccount extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        Button btnSignUp = (Button) findViewById(R.id.sign_up_button);
-        final EditText inputEmail = (EditText) findViewById(R.id.email);
-        final EditText inputPassword = (EditText) findViewById(R.id.password);
+        btnSignUp = (Button) findViewById(R.id.sign_up_button);
+        inputEmail = (EditText) findViewById(R.id.email);
+        inputPassword = (EditText) findViewById(R.id.password);
+//      inputConfirmPassword = (EditText) findViewById(R.id.confirm_password);
 
         btnSignUp.setOnClickListener((new View.OnClickListener() {
             @Override
@@ -38,6 +43,7 @@ public class CreateAccount extends AppCompatActivity {
 
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
+//              String confirmPassword = inputConfirmPassword.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
@@ -48,6 +54,11 @@ public class CreateAccount extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+//                if (!inputConfirmPassword.equals(password)){
+//                    Toast.makeText(getApplicationContext(), "Password does not match", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
 
                 //This is where a user is created
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(CreateAccount.this, new OnCompleteListener<AuthResult>() {
