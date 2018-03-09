@@ -65,7 +65,7 @@
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/checkbox"
+        android:layout_below="@+id/chkboxRemember"
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="50dp"
         android:layout_marginStart="50dp"
