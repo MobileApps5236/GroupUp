@@ -18,10 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-/**
- * Created by tonyrobb on 3/20/18.
- */
-
 public class CreateAccountFragment extends Fragment {
     private Button btnSignUp;
     EditText inputEmail;
@@ -38,7 +34,7 @@ public class CreateAccountFragment extends Fragment {
         btnSignUp = (Button) v.findViewById(R.id.sign_up_button);
         inputEmail = (EditText) v.findViewById(R.id.email);
         inputPassword = (EditText) v.findViewById(R.id.password);
-//      inputConfirmPassword = (EditText) findViewById(R.id.confirm_password);
+        inputConfirmPassword = (EditText) v.findViewById(R.id.confirm_password);
 
         btnSignUp.setOnClickListener((new View.OnClickListener() {
             @Override
@@ -46,7 +42,7 @@ public class CreateAccountFragment extends Fragment {
 
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
-//              String confirmPassword = inputConfirmPassword.getText().toString().trim();
+                String confirmPassword = inputConfirmPassword.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
@@ -58,23 +54,21 @@ public class CreateAccountFragment extends Fragment {
                     return;
                 }
 
-//                if (!inputConfirmPassword.equals(password)){
-//                    Toast.makeText(getApplicationContext(), "Password does not match", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
+                if (!password.equals(confirmPassword)){
+                    Toast.makeText(getActivity().getApplicationContext(), "Password does not match", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 //This is where a user is created
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(getActivity(), "Created user: " + task.isSuccessful(), Toast.LENGTH_SHORT).show();
 
                         if (!task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Authentication failed: " + task.getException(), Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent intent = new Intent(getActivity(), MainPage.class);
-                            startActivity(intent);
-                            getActivity().finish();
+                            Toast.makeText(getActivity(), "User successfully created ", Toast.LENGTH_SHORT).show();
+                            getFragmentManager().popBackStackImmediate();
                         }
                     }
                 });
