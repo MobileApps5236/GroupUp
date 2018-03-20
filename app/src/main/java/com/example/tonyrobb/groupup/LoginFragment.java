@@ -51,16 +51,16 @@ public class LoginFragment extends Fragment {
 
         // Get another instance
         auth = FirebaseAuth.getInstance();
-/*  Still working on this
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick (View view) {
-                Intent intent = new Intent(getApplicationContext(), CreateAccount.class);
-                startActivity(intent);
+                CreateAccountFragment createAccountFragment = new CreateAccountFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, createAccountFragment, "nextFrag").addToBackStack(null).commit();
             }
         });
-*/
+
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
 
