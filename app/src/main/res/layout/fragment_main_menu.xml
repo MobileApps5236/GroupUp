@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_margin="16dp"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Main Menu"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="40sp" />
+
+    <Button
+        android:id="@+id/classes_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:enabled="true"
+        android:text="My Classes and Groups"
+        android:textColor="@android:color/background_dark"
+        android:theme="@style/AppTheme" />
+
+    <Button
+        android:id="@+id/enroll_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:enabled="true"
+        android:text="Enroll in a Class"
+        android:textColor="@android:color/background_dark"
+        android:theme="@style/AppTheme" />
+
+    <Button
+        android:id="@+id/profile_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:enabled="true"
+        android:text="My Profile"
+        android:textColor="@android:color/background_dark"
+        android:theme="@style/AppTheme" />
+
+</LinearLayout>
