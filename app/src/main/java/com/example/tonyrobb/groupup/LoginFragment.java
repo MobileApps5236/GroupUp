@@ -1,7 +1,7 @@
 package com.example.tonyrobb.groupup;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,34 +21,46 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-/**
- * Created by Egg on 3/8/2018.
- */
+import static android.content.Context.MODE_PRIVATE;
 
 public class LoginFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    private Button loginBtn, btnSignUp;
+    private CheckBox chkboxRememberMe;
     private EditText inputEmail, inputPassword;
+    private String email, password;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+    private Boolean saveLogin;
     private FirebaseAuth auth;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
         auth = FirebaseAuth.getInstance();
-        System.out.println("=========================");
-        System.out.println(auth);
-
         // If user is not logged in then continue as normal
         Log.v("Login", "onCreate triggered");
 
-        Button loginBtn = (Button) v.findViewById(R.id.btnLogin);
-        Button btnSignUp = (Button) v.findViewById(R.id.btnCreateAccount);
-
+        loginBtn = (Button) v.findViewById(R.id.btnLogin);
+        btnSignUp = (Button) v.findViewById(R.id.btnCreateAccount);
+        chkboxRememberMe = (CheckBox) v.findViewById(R.id.chkboxRemember);
         inputEmail = (EditText) v.findViewById(R.id.username);
         inputPassword = (EditText) v.findViewById(R.id.password);
+        loginPreferences = this.getActivity().getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+
+        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin) {
+            inputEmail.setText(loginPreferences.getString("email", ""));
+            inputPassword.setText(loginPreferences.getString("password", ""));
+            chkboxRememberMe.setChecked(true);
+        }
 
         // Get another instance
         auth = FirebaseAuth.getInstance();
@@ -57,7 +70,9 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick (View view) {
                 CreateAccountFragment createAccountFragment = new CreateAccountFragment();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, createAccountFragment, "nextFrag").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, createAccountFragment, "nextFrag")
+                        .addToBackStack(null).commit();
             }
         });
 
@@ -66,8 +81,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                String email = inputEmail.getText().toString();
-                final String password = inputPassword.getText().toString();
+                email = inputEmail.getText().toString();
+                password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getActivity().getApplicationContext(), "Enter email address", Toast.LENGTH_SHORT).show();
@@ -83,6 +98,7 @@ public class LoginFragment extends Fragment {
                 // Authenticate user
                 auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (!task.isSuccessful()) {
@@ -92,9 +108,18 @@ public class LoginFragment extends Fragment {
                                         Toast.makeText(getActivity().getApplicationContext(), "Password too short (under 6 characters)", Toast.LENGTH_LONG).show();
                                     }
                                 } else {
-                                    Intent intent = new Intent(getActivity().getApplicationContext(), MainPage.class);
-                                    startActivity(intent);
+                                    if (chkboxRememberMe.isChecked()) {
+                                        loginPrefsEditor.putBoolean("saveLogin", true);
+                                        loginPrefsEditor.putString("email", email);
+                                        loginPrefsEditor.putString("password", password);
+                                        loginPrefsEditor.apply();
+                                    } else {
+                                        loginPrefsEditor.clear();
+                                        loginPrefsEditor.commit();
+                                    }
 
+                                    Intent intent = new Intent(getActivity().getApplicationContext(), MainMenu.class);
+                                    startActivity(intent);
                                     getActivity().finish();
                                 }
                             }
