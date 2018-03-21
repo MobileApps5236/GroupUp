@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -35,6 +36,23 @@ public class ClassListFragment extends Fragment {
         databaseClasses = FirebaseDatabase.getInstance().getReference("classes");
         listViewClasses = (ListView) v.findViewById(R.id.listViewClasses);
         classList = new ArrayList<>();
+
+        listViewClasses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Class aClass = classList.get(i);
+                SectionListFragment fragment = new SectionListFragment();
+                Bundle args = new Bundle();
+                args.putString("classId", aClass.getClassId());
+                args.putString("dept", aClass.getDepartment());
+                args.putInt("classNum", aClass.getClassNumber());
+
+                fragment.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "toSections").addToBackStack(null).commit();
+
+            }
+        });
+
         return v;
     }
 
@@ -49,7 +67,6 @@ public class ClassListFragment extends Fragment {
 
                 for(DataSnapshot classSnapshot : dataSnapshot.getChildren()){
                     Class aClass = classSnapshot.getValue(Class.class);
-
                     classList.add(aClass);
                 }
 
