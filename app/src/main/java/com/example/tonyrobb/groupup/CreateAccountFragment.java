@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class CreateAccountFragment extends Fragment {
     EditText inputEmail;
     EditText inputPassword;
     EditText inputConfirmPassword;
+    CheckBox isProfessor;
     private FirebaseAuth auth;
 
     @Nullable
@@ -35,6 +37,7 @@ public class CreateAccountFragment extends Fragment {
         inputEmail = (EditText) v.findViewById(R.id.email);
         inputPassword = (EditText) v.findViewById(R.id.password);
         inputConfirmPassword = (EditText) v.findViewById(R.id.confirm_password);
+        isProfessor = (CheckBox) v.findViewById(R.id.professor_checkbox);
 
         btnSignUp.setOnClickListener((new View.OnClickListener() {
             @Override

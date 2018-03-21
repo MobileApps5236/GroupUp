@@ -67,4 +67,15 @@
         android:textColor="@android:color/background_dark"
         android:theme="@style/AppTheme" />
 
+    <CheckBox
+        android:id="@+id/professor_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:text="Are you a professor?"
+        />
+
+
 </LinearLayout>
