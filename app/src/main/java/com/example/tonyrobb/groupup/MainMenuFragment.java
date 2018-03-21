@@ -32,7 +32,8 @@ public class MainMenuFragment extends Fragment {
         btnEnroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ClassListFragment fragment = new ClassListFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "toEnroll").addToBackStack(null).commit();
             }
         });
 
