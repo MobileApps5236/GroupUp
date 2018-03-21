@@ -2,4 +2,7 @@
     <string name="app_name">GroupUp</string>
     <string name="title_activity_create_account">CreateAccount</string>
     <string name="action_settings">Settings</string>
+    <string name="my_classes">My Classes</string>
+    <string name="enroll">Enroll</string>
+    <string name="my_profile">My Profile</string>
 </resources>
