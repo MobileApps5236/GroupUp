@@ -16,6 +16,10 @@ public class User {
     private Uri profilePicUrl;
     private boolean isProf;
 
+    public User(){
+
+    }
+
     public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf){
         this.userId = userId;
         this.email = email;

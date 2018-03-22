@@ -1,6 +1,7 @@
 package com.example.tonyrobb.groupup;
 
 import android.content.DialogInterface;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,7 @@ public class SectionListFragment extends Fragment {
     EditText editTextAddSection;
     Button btnAddSection;
     ListView listViewSections;
+    boolean isProf;
     DatabaseReference user;
     FirebaseAuth auth;
     String dept;
@@ -44,20 +46,26 @@ public class SectionListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v;
-        //if(user.)
         v = inflater.inflate(R.layout.fragment_section_list, container, false);
+
+
+
+        auth = FirebaseAuth.getInstance();
+        user = FirebaseDatabase.getInstance().getReference("users").child(auth.getUid());
         databaseSections = FirebaseDatabase.getInstance().getReference("sections").child(getArguments().getString("classId"));
-        editTextAddSection = (EditText) v.findViewById(R.id.editTextAddSection);
-        btnAddSection = (Button) v.findViewById(R.id.btnAddSection);
+
         listViewSections = (ListView) v.findViewById(R.id.listViewSections);
         sectionList = new ArrayList<Section>();
 
+        editTextAddSection = (EditText) v.findViewById(R.id.editTextAddSection);
+        btnAddSection = (Button) v.findViewById(R.id.btnAddSection);
         btnAddSection.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 addSection();
             }
         });
+
 
         listViewSections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -87,16 +95,30 @@ public class SectionListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        auth = FirebaseAuth.getInstance();
-        user = FirebaseDatabase.getInstance().getReference("users").child(auth.getUid());
+
         dept = getArguments().get("dept").toString();
 
         classNum = getArguments().getInt("classNum");
 
+        user.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.print("HEY");
+                if(dataSnapshot.getValue(User.class).getIsProf()){
+                    editTextAddSection.setVisibility(View.VISIBLE);
+                    btnAddSection.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("HELLO");
+            }
+        });
         databaseSections.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                System.out.println("WHY");
                 sectionList.clear();
                 for(DataSnapshot sectionSnapshot : dataSnapshot.getChildren()){
                     Section section = sectionSnapshot.getValue(Section.class);
