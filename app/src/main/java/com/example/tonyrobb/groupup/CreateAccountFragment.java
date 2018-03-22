@@ -1,6 +1,7 @@
 package com.example.tonyrobb.groupup;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,32 +19,44 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.net.URL;
 
 public class CreateAccountFragment extends Fragment {
     private Button btnSignUp;
-    EditText inputEmail;
-    EditText inputPassword;
-    EditText inputConfirmPassword;
-    CheckBox isProfessor;
-    private FirebaseAuth auth;
+    private EditText inputEmail;
+    private EditText inputFirstName;
+    private EditText inputLastName;
+    private EditText inputPassword;
+    private EditText inputConfirmPassword;
+    private CheckBox chkboxIsProfessor;
 
+    private FirebaseAuth auth;
+    private DatabaseReference databaseUsers;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_create_account, container, false);
         auth = FirebaseAuth.getInstance();
+        databaseUsers = FirebaseDatabase.getInstance().getReference("users");
 
         btnSignUp = (Button) v.findViewById(R.id.sign_up_button);
         inputEmail = (EditText) v.findViewById(R.id.email);
+        inputFirstName = (EditText) v.findViewById(R.id.first_name);
+        inputLastName = (EditText) v.findViewById(R.id.last_name);
         inputPassword = (EditText) v.findViewById(R.id.password);
         inputConfirmPassword = (EditText) v.findViewById(R.id.confirm_password);
-        isProfessor = (CheckBox) v.findViewById(R.id.professor_checkbox);
+        chkboxIsProfessor = (CheckBox) v.findViewById(R.id.professor_checkbox);
 
-        btnSignUp.setOnClickListener((new View.OnClickListener() {
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String email = inputEmail.getText().toString().trim();
+                final String email = inputEmail.getText().toString().trim();
+                final String firstName = inputFirstName.getText().toString().trim();
+                final String lastName = inputLastName.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
                 String confirmPassword = inputConfirmPassword.getText().toString().trim();
 
@@ -70,13 +83,23 @@ public class CreateAccountFragment extends Fragment {
                         if (!task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Authentication failed: " + task.getException(), Toast.LENGTH_SHORT).show();
                         } else {
+                            addUser(email, firstName, lastName, chkboxIsProfessor.isChecked());
+
                             Toast.makeText(getActivity(), "User successfully created ", Toast.LENGTH_SHORT).show();
                             getFragmentManager().popBackStackImmediate();
                         }
                     }
                 });
             }
-        }));
+        });
         return v;
+    }
+
+    private void addUser(String email, String firstName, String lastName, boolean isProf){
+        String userId = auth.getCurrentUser().getUid();
+        Uri profilePicUrl =  auth.getCurrentUser().getPhotoUrl();
+
+        User user = new User(userId, email, firstName, lastName, profilePicUrl, isProf);
+        databaseUsers.child(userId).setValue(user);
     }
 }
