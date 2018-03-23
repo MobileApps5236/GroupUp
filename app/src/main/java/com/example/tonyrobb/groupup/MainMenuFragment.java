@@ -24,8 +24,8 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void onClick(View v) {
 //                TODO: implement onclick listeners
-//                MyClasses myClasses = new MyClasses();
-//                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myClasses, "nextFrag").addToBackStack(null).commit();
+                MyClassesFragment fragment = new MyClassesFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "myClasses").addToBackStack(null).commit();
             }
         });
 

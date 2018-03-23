@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GroupUp.iml" filepath="$PROJECT_DIR$/GroupUp.iml" />
-      <module fileurl="file://C:\Users\Jpp1995\Documents\Senior Year\Last Semester\Mobile Apps\GroupUp\GroupUp.iml" filepath="C:\Users\Jpp1995\Documents\Senior Year\Last Semester\Mobile Apps\GroupUp\GroupUp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Jpp1995\Documents\Senior Year\Last Semester\Mobile Apps\GroupUp\app\app.iml" filepath="C:\Users\Jpp1995\Documents\Senior Year\Last Semester\Mobile Apps\GroupUp\app\app.iml" />
     </modules>
   </component>
 </project>

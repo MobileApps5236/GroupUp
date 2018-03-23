@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateAccountFragment extends Fragment {
     private Button btnSignUp;
@@ -98,8 +100,9 @@ public class CreateAccountFragment extends Fragment {
     private void addUser(String email, String firstName, String lastName, boolean isProf){
         String userId = auth.getCurrentUser().getUid();
         Uri profilePicUrl =  auth.getCurrentUser().getPhotoUrl();
+        List<String> sectionsList = new ArrayList<String>();
 
-        User user = new User(userId, email, firstName, lastName, profilePicUrl, isProf);
+        User user = new User(userId, email, firstName, lastName, profilePicUrl, isProf, sectionsList);
         databaseUsers.child(userId).setValue(user);
     }
 }
