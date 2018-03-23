@@ -56,7 +56,14 @@ public class MyClassesFragment extends Fragment {
                 Log.i("UserID?", currentUser.getUid());
                 Log.i("DatabaseUserID?", user.getEmail());
                 List<String> temp = user.getSectionsEnrolledIn();
-                sectionList.add(temp.get(0));
+                if ((temp.get(0).equals("No enrolled classes")) && (temp.size() > 1)){
+                    temp.remove(0);
+                    for (int i = 0; i < temp.size();i++) {
+                        sectionList.add(temp.get(i));
+                    }
+                } else {
+                    sectionList.add(temp.get(0));
+                }
 
                 MyClassesAdapter adapter = new MyClassesAdapter(getActivity(), sectionList);
                 listViewSections.setAdapter(adapter);

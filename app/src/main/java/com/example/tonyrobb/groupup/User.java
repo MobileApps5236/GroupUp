@@ -28,7 +28,7 @@ public class User {
         major = "";
         skills = "";
         this.profilePicUrl = profilePicUrl;
-        sectionsEnrolledIn.add("filler");
+        sectionsEnrolledIn.add("No enrolled classes");
         this.sectionsEnrolledIn = sectionsEnrolledIn;
     }
 
@@ -46,7 +46,7 @@ public class User {
         major = "";
         skills = "";
         this.profilePicUrl = profilePicUrl;
-        sectionsEnrolledIn.add("filler");
+        sectionsEnrolledIn.add("No enrolled classes");
         this.sectionsEnrolledIn = sectionsEnrolledIn;
     }
 
