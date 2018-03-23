@@ -1,5 +1,7 @@
 package com.example.tonyrobb.groupup;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,10 +9,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,8 +35,12 @@ public class SectionListFragment extends Fragment {
     Button btnAddSection;
     ListView listViewSections;
     String dept;
+    boolean isProf;
     int classNum;
     List<Section> sectionList;
+
+    DatabaseReference user;
+    FirebaseAuth auth;
 
     @Nullable
     @Override
@@ -43,12 +51,35 @@ public class SectionListFragment extends Fragment {
         btnAddSection = (Button) v.findViewById(R.id.btnAddSection);
         listViewSections = (ListView) v.findViewById(R.id.listViewSections);
         sectionList = new ArrayList<Section>();
-
+        auth = FirebaseAuth.getInstance();
+        user = FirebaseDatabase.getInstance().getReference("users").child(auth.getUid());
         btnAddSection.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 addSection();
             }
+        });
+
+        listViewSections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                final int pos = i;
+                                builder.setMessage("Do you want to enroll in section " + sectionList.get(i).getSectionNumber() +"?")
+                                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                        user.child("sectionsEnrolledIn").child(sectionList.get(pos).getSectionId()).setValue(sectionList.get(pos));
+                                                    }
+                        })
+                                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                            }
+                        });
+                                builder.create().show();
+                            }
         });
 
         return v;
@@ -57,11 +88,24 @@ public class SectionListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        dept = getArguments().get("dept").toString();
-
+        auth = FirebaseAuth.getInstance();
+        dept = getArguments().getString("dept");
         classNum = getArguments().getInt("classNum");
+                user.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                                System.out.print("HEY");
+                                if(dataSnapshot.getValue(User.class).getIsProf()){
+                                        editTextAddSection.setVisibility(View.VISIBLE);
+                                        btnAddSection.setVisibility(View.VISIBLE);
+                                    }
+                            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                                System.out.println("HELLO");
+                            }
+        });
         databaseSections.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

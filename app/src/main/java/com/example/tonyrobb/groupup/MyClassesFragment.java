@@ -21,7 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyClassesFragment extends Fragment {
 
@@ -36,7 +38,7 @@ public class MyClassesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_my_classes, container, false);
-        databaseSections = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid());
+        databaseSections = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).child("sectionsEnrolledIn");
         listViewSections = (ListView) v.findViewById(R.id.listViewSections);
         sectionList = new ArrayList<String>();
 
@@ -52,18 +54,14 @@ public class MyClassesFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 sectionList.clear();
-                User user = dataSnapshot.getValue(User.class);
-                Log.i("UserID?", currentUser.getUid());
-                Log.i("DatabaseUserID?", user.getEmail());
-                List<String> temp = user.getSectionsEnrolledIn();
-                if ((temp.get(0).equals("No enrolled classes")) && (temp.size() > 1)){
-                    temp.remove(0);
-                    for (int i = 0; i < temp.size();i++) {
-                        sectionList.add(temp.get(i));
-                    }
-                } else {
-                    sectionList.add(temp.get(0));
+                //User user = dataSnapshot.getValue(User.class);
+                for(DataSnapshot sectionSnapshot : dataSnapshot.getChildren()){
+                    Section section = sectionSnapshot.getValue(Section.class);
+                    System.out.println("HEY");
+                    sectionList.add(Integer.toString(section.getSectionNumber()));
                 }
+                Log.i("UserID?", currentUser.getUid());
+
 
                 MyClassesAdapter adapter = new MyClassesAdapter(getActivity(), sectionList);
                 listViewSections.setAdapter(adapter);
