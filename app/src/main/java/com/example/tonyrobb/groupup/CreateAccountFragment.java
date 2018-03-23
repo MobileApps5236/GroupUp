@@ -1,7 +1,5 @@
 package com.example.tonyrobb.groupup;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,10 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class CreateAccountFragment extends Fragment {
     private Button btnSignUp;
@@ -100,10 +95,9 @@ public class CreateAccountFragment extends Fragment {
 
     private void addUser(String email, String firstName, String lastName, boolean isProf){
         String userId = auth.getCurrentUser().getUid();
-        Uri profilePicUrl =  auth.getCurrentUser().getPhotoUrl();
         HashMap<String,Section> sectionsList = new HashMap<>();
 
-        User user = new User(userId, email, firstName, lastName, profilePicUrl, isProf, sectionsList);
+        User user = new User(userId, email, firstName, lastName, isProf, sectionsList);
         databaseUsers.child(userId).setValue(user);
     }
 }

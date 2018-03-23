@@ -2,9 +2,7 @@ package com.example.tonyrobb.groupup;
 
 import android.net.Uri;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class User {
 
@@ -15,14 +13,15 @@ public class User {
     private String bio;
     private String major;
     private String skills;
-    private Uri profilePicUrl;
+    //private Uri profilePicUrl;
     private boolean isProf;
     private HashMap<String,Section> sectionsEnrolledIn;
+
     public User(){
 
     }
 
-    public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf, HashMap<String,Section> sectionsEnrolledIn){
+    public User(String userId, String email, String firstName, String lastName, boolean isProf, HashMap<String,Section> sectionsEnrolledIn){
         this.userId = userId;
         this.email = email;
         this.firstName = firstName;
@@ -31,31 +30,7 @@ public class User {
         bio = "";
         major = "";
         skills = "";
-        this.profilePicUrl = profilePicUrl;
-        this.sectionsEnrolledIn = sectionsEnrolledIn;
-    }
-
-    public User(String userId, String email, String firstName, String lastName, boolean isProf){
-        this.userId = userId;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.isProf = isProf;
-        bio = "";
-        major = "";
-        skills = "";
-    }
-
-    public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf){
-        this.userId = userId;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.isProf = isProf;
-        bio = "";
-        major = "";
-        skills = "";
-        this.profilePicUrl = profilePicUrl;
+        //this.profilePicUrl = Uri.parse("https://firebasestorage.googleapis.com/v0/b/groupup-cc709.appspot.com/o/profile_pictures%2Fdefault_pic.jpg?alt=media&token=447fe1a9-ffd1-41f9-ac45-d6937b0fe825");
         this.sectionsEnrolledIn = sectionsEnrolledIn;
     }
 
@@ -86,9 +61,21 @@ public class User {
 
     public boolean getIsProf() { return isProf; }
 
-    public Uri getDefaultProfilePic() { return profilePicUrl; }
+    //public Uri getDefaultProfilePic() { return profilePicUrl; }
 
     public HashMap<String,Section> getSectionsEnrolledIn() {
         return sectionsEnrolledIn;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public void setSkills(String skills) {
+        this.skills = skills;
     }
 }

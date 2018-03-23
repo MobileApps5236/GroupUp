@@ -3,6 +3,7 @@ package com.example.tonyrobb.groupup;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MyProfileFragment extends Fragment {
 
     DatabaseReference databaseCurrentUser;
+    User currentUser;
     private TextView txtFirstName, txtLastName, txtEmail;
     private EditText editMajor, editSkills, editBio;
     private ImageView imgPofilePicture;
@@ -62,7 +64,7 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                User currentUser = dataSnapshot.getValue(User.class);
+                currentUser = dataSnapshot.getValue(User.class);
 
                 txtFirstName.setText(currentUser.getFirstName());
                 txtLastName.setText(currentUser.getLastName());
@@ -80,9 +82,21 @@ public class MyProfileFragment extends Fragment {
     }
 
     private void updateProfile(DatabaseReference databaseCurrentUser) {
-        databaseCurrentUser.child(getArguments().getString("major")).setValue(editMajor.getText());
-        databaseCurrentUser.child(getArguments().getString("skills")).setValue(editSkills.getText());
-        databaseCurrentUser.child(getArguments().getString("bio")).setValue(editBio.getText());
+
+        String major = editMajor.getText().toString().trim();
+        if (!TextUtils.isEmpty(major)){
+            currentUser.setMajor(major);
+        }
+        String skills = editSkills.getText().toString().trim();
+        if (!TextUtils.isEmpty(skills)){
+            currentUser.setSkills(skills);
+        }
+        String bio = editBio.getText().toString().trim();
+        if (!TextUtils.isEmpty(bio)){
+            currentUser.setBio(bio);
+        }
+
+        databaseCurrentUser.setValue(currentUser);
     }
 }
 
