@@ -46,6 +46,13 @@ public class MyProfileFragment extends Fragment {
         databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users").child(userID);
         populateFields(databaseCurrentUser);
 
+        buttonUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateProfile(databaseCurrentUser);
+            }
+        });
+
         return v;
     }
 
@@ -70,6 +77,12 @@ public class MyProfileFragment extends Fragment {
 
             }
         });
+    }
+
+    private void updateProfile(DatabaseReference databaseCurrentUser) {
+        databaseCurrentUser.child(getArguments().getString("major")).setValue(editMajor.getText());
+        databaseCurrentUser.child(getArguments().getString("skills")).setValue(editSkills.getText());
+        databaseCurrentUser.child(getArguments().getString("bio")).setValue(editBio.getText());
     }
 }
 
