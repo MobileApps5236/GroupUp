@@ -32,9 +32,9 @@ public class User {
         this.sectionsEnrolledIn = sectionsEnrolledIn;
     }
 
-    public User(){
+    //public User(){
 
-    }
+    //}
 
     public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf){
         this.userId = userId;
@@ -49,6 +49,8 @@ public class User {
         sectionsEnrolledIn.add("filler");
         this.sectionsEnrolledIn = sectionsEnrolledIn;
     }
+
+    public User() {}
 
     public String getUserId() { return userId; }
 

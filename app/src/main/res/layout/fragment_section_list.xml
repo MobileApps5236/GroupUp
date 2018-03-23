@@ -10,14 +10,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:hint="Add a Section"
-        android:visibility="gone"
         android:inputType="number" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add"
-        android:visibility="gone"
         android:id="@+id/btnAddSection"
         android:layout_margin="10dp" />
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -56,8 +54,6 @@
             android:text="Section Num"/>
     </LinearLayout>
     <ListView
-
-
         android:id="@+id/listViewSections"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
