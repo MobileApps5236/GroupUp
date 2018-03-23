@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -84,19 +85,24 @@ public class MyProfileFragment extends Fragment {
     private void updateProfile(DatabaseReference databaseCurrentUser) {
 
         String major = editMajor.getText().toString().trim();
-        if (!TextUtils.isEmpty(major)){
-            currentUser.setMajor(major);
+        if (TextUtils.isEmpty(major)){
+            major = "";
         }
         String skills = editSkills.getText().toString().trim();
-        if (!TextUtils.isEmpty(skills)){
-            currentUser.setSkills(skills);
+        if (TextUtils.isEmpty(skills)){
+            skills = "";
         }
         String bio = editBio.getText().toString().trim();
-        if (!TextUtils.isEmpty(bio)){
-            currentUser.setBio(bio);
+        if (TextUtils.isEmpty(bio)){
+            bio = "";
         }
 
+        currentUser.setMajor(major);
+        currentUser.setSkills(skills);
+        currentUser.setBio(bio);
+
         databaseCurrentUser.setValue(currentUser);
+        Toast.makeText(getActivity(), "Profile successfully updated ", Toast.LENGTH_SHORT).show();
     }
 }
 

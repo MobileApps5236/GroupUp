@@ -47,13 +47,13 @@
         <ImageView
             android:id="@+id/profile_pic"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_weight="4"
-            android:clickable="true"
+            android:contentDescription="profile_picture"
             app:srcCompat="@android:drawable/ic_menu_camera" />
 
     </LinearLayout>
@@ -79,14 +79,13 @@
 
         <TextView
             android:id="@+id/txt_major"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="1"
             android:paddingLeft="5dp"
             android:text="Major"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -95,14 +94,13 @@
 
         <EditText
             android:id="@+id/edit_major"
-            android:layout_width="wrap_content"
+            android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="9"
             android:inputType="text"
             android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -119,14 +117,13 @@
 
         <TextView
             android:id="@+id/txt_skills"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="1.2"
             android:paddingLeft="5dp"
             android:text="Skills"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -135,14 +132,13 @@
 
         <EditText
             android:id="@+id/edit_skills"
-            android:layout_width="wrap_content"
+            android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="9"
             android:inputType="textImeMultiLine"
             android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -158,14 +154,13 @@
 
         <TextView
             android:id="@+id/txt_bio"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="1.7"
             android:paddingLeft="5dp"
             android:text="Bio"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -174,14 +169,13 @@
 
         <EditText
             android:id="@+id/edit_bio"
-            android:layout_width="wrap_content"
+            android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="9"
             android:inputType="textImeMultiLine"
             android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"

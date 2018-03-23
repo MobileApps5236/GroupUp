@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -53,7 +54,7 @@ public class SectionListFragment extends Fragment {
         sectionList = new ArrayList<Section>();
         auth = FirebaseAuth.getInstance();
         user = FirebaseDatabase.getInstance().getReference("users").child(auth.getUid());
-        btnAddSection.setOnClickListener(new View.OnClickListener(){
+        btnAddSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addSection();
@@ -63,23 +64,24 @@ public class SectionListFragment extends Fragment {
         listViewSections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                final int pos = i;
-                                builder.setMessage("Do you want to enroll in section " + sectionList.get(i).getSectionNumber() +"?")
-                                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final int pos = i;
+                builder.setMessage("Do you want to enroll in section " + sectionList.get(i).getSectionNumber() + "?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                        user.child("sectionsEnrolledIn").child(sectionList.get(pos).getSectionId()).setValue(sectionList.get(pos));
-                                                    }
-                        })
-                                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                                            }
-                        });
-                                builder.create().show();
+                                user.child("sectionsEnrolledIn").child(sectionList.get(pos).getSectionId()).setValue(sectionList.get(pos));
+                                Toast.makeText(getActivity(), "Enrollment Successful", Toast.LENGTH_SHORT).show();
                             }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // Do nothing
+                            }
+                        });
+                builder.create().show();
+            }
         });
 
         return v;
@@ -91,27 +93,27 @@ public class SectionListFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         dept = getArguments().getString("dept");
         classNum = getArguments().getInt("classNum");
-                user.addValueEventListener(new ValueEventListener() {
+        user.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                                System.out.print("HEY");
-                                if(dataSnapshot.getValue(User.class).getIsProf()){
-                                        editTextAddSection.setVisibility(View.VISIBLE);
-                                        btnAddSection.setVisibility(View.VISIBLE);
-                                    }
-                            }
+                System.out.print("HEY");
+                if (dataSnapshot.getValue(User.class).getIsProf()) {
+                    editTextAddSection.setVisibility(View.VISIBLE);
+                    btnAddSection.setVisibility(View.VISIBLE);
+                }
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                                System.out.println("HELLO");
-                            }
+                System.out.println("HELLO");
+            }
         });
         databaseSections.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 sectionList.clear();
-                for(DataSnapshot sectionSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot sectionSnapshot : dataSnapshot.getChildren()) {
                     Section section = sectionSnapshot.getValue(Section.class);
                     sectionList.add(section);
                 }
@@ -127,15 +129,16 @@ public class SectionListFragment extends Fragment {
         });
     }
 
-    private void addSection(){
+    private void addSection() {
         String sectionNumber = editTextAddSection.getText().toString().trim();
         //TODO: make sure the user enters in a number
 
-        if(!TextUtils.isEmpty(sectionNumber)){
+        if (!TextUtils.isEmpty(sectionNumber)) {
             String id = databaseSections.push().getKey();
 
             Section section = new Section(id, Integer.parseInt(sectionNumber));
             databaseSections.child(id).setValue(section);
+            Toast.makeText(getActivity(), "Section Created Successfully", Toast.LENGTH_SHORT).show();
         }
 
     }

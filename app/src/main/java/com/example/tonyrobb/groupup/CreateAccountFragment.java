@@ -84,6 +84,7 @@ public class CreateAccountFragment extends Fragment {
                             addUser(email, firstName, lastName, chkboxIsProfessor.isChecked());
 
                             Toast.makeText(getActivity(), "User successfully created ", Toast.LENGTH_SHORT).show();
+                            auth.signOut();
                             getFragmentManager().popBackStackImmediate();
                         }
                     }
