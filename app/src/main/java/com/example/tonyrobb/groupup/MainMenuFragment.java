@@ -40,7 +40,10 @@ public class MainMenuFragment extends Fragment {
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                MyProfileFragment myProfileFragment = new MyProfileFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, myProfileFragment, "toMyProfile")
+                        .addToBackStack(null).commit();
             }
         });
 
