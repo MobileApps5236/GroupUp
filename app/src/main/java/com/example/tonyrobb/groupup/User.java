@@ -3,6 +3,7 @@ package com.example.tonyrobb.groupup;
 import android.net.Uri;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class User {
@@ -16,9 +17,12 @@ public class User {
     private String skills;
     private Uri profilePicUrl;
     private boolean isProf;
-    private List<String> sectionsEnrolledIn;
+    private HashMap<String,Section> sectionsEnrolledIn;
+    public User(){
 
-    public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf, List<String> sectionsEnrolledIn){
+    }
+
+    public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf, HashMap<String,Section> sectionsEnrolledIn){
         this.userId = userId;
         this.email = email;
         this.firstName = firstName;
@@ -28,13 +32,19 @@ public class User {
         major = "";
         skills = "";
         this.profilePicUrl = profilePicUrl;
-        sectionsEnrolledIn.add("No enrolled classes");
         this.sectionsEnrolledIn = sectionsEnrolledIn;
     }
 
-    //public User(){
-
-    //}
+    public User(String userId, String email, String firstName, String lastName, boolean isProf){
+        this.userId = userId;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.isProf = isProf;
+        bio = "";
+        major = "";
+        skills = "";
+    }
 
     public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf){
         this.userId = userId;
@@ -46,11 +56,9 @@ public class User {
         major = "";
         skills = "";
         this.profilePicUrl = profilePicUrl;
-        sectionsEnrolledIn.add("No enrolled classes");
         this.sectionsEnrolledIn = sectionsEnrolledIn;
     }
 
-    public User() {}
 
     public String getUserId() { return userId; }
 
@@ -80,7 +88,7 @@ public class User {
 
     public Uri getDefaultProfilePic() { return profilePicUrl; }
 
-    public List<String> getSectionsEnrolledIn() {
+    public HashMap<String,Section> getSectionsEnrolledIn() {
         return sectionsEnrolledIn;
     }
 }
