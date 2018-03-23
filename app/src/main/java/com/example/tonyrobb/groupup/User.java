@@ -18,13 +18,7 @@ public class User {
     private boolean isProf;
     private List<String> sectionsEnrolledIn;
 
-    public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf, List<String> sectionsEnrolledIn){}
-
-    public User(){
-
-    }
-
-    public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf){
+    public User(String userId, String email, String firstName, String lastName, Uri profilePicUrl, boolean isProf, List<String> sectionsEnrolledIn){
         this.userId = userId;
         this.email = email;
         this.firstName = firstName;
@@ -37,6 +31,8 @@ public class User {
         sectionsEnrolledIn.add("L88wDRsKAlMYbiCIrfL");
         this.sectionsEnrolledIn = sectionsEnrolledIn;
     }
+
+    public User() {}
 
     public String getUserId() { return userId; }
 
