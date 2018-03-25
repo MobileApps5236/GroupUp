@@ -1,9 +1,17 @@
 package com.example.tonyrobb.groupup;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,31 +27,31 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class MyProfileFragment extends Fragment {
 
     DatabaseReference databaseCurrentUser;
     User currentUser;
-    private TextView txtFirstName, txtLastName, txtEmail;
+    Uri imageUri;
+
+    private TextView txtName, txtEmail;
     private EditText editMajor, editSkills, editBio;
     private ImageView imgPofilePicture;
-    private Button buttonUpdate, buttonSelectImage, buttonTakePhoto;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        txtFirstName = (TextView) v.findViewById(R.id.txt_first_name);
-        txtLastName = (TextView) v.findViewById(R.id.txt_last_name);
+        txtName = (TextView) v.findViewById(R.id.txt_name);
         txtEmail = (TextView) v.findViewById(R.id.txt_email);
         editMajor = (EditText) v.findViewById(R.id.edit_major);
         editSkills = (EditText) v.findViewById(R.id.edit_skills);
         editBio = (EditText) v.findViewById(R.id.edit_bio);
         imgPofilePicture = (ImageView) v.findViewById(R.id.profile_pic);
-        buttonUpdate = (Button) v.findViewById(R.id.button_update);
-        buttonSelectImage = (Button) v.findViewById(R.id.button_select_image);
-        buttonTakePhoto = (Button) v.findViewById(R.id.button_take_photo);
+        Button buttonUpdate = (Button) v.findViewById(R.id.button_update);
 
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users").child(userID);
@@ -53,6 +61,13 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 updateProfile(databaseCurrentUser);
+            }
+        });
+
+        imgPofilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profilePicSelection();
             }
         });
 
@@ -67,8 +82,7 @@ public class MyProfileFragment extends Fragment {
 
                 currentUser = dataSnapshot.getValue(User.class);
 
-                txtFirstName.setText(currentUser.getFirstName());
-                txtLastName.setText(currentUser.getLastName());
+                txtName.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
                 txtEmail.setText(currentUser.getEmail());
                 editMajor.setText(currentUser.getMajor());
                 editSkills.setText(currentUser.getSkills());
@@ -103,6 +117,51 @@ public class MyProfileFragment extends Fragment {
 
         databaseCurrentUser.setValue(currentUser);
         Toast.makeText(getActivity(), "Profile successfully updated ", Toast.LENGTH_SHORT).show();
+    }
+
+    private void profilePicSelection() {
+
+        final CharSequence[] items = {"Select or Take a Photo", "Cancel"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Choose Profile Picture");
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (items[item].equals("Select or Take a Photo")) {
+                    getCroppedPhotoIntent();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void getCroppedPhotoIntent() {
+
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(getContext(), this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //image crop library code
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == Activity.RESULT_OK) {
+                imageUri = result.getUri();
+
+                imgPofilePicture.setImageURI(imageUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 }
 
