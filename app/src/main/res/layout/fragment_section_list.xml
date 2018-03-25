@@ -20,40 +20,45 @@
         android:visibility="gone"
         android:id="@+id/btnAddSection"
         android:layout_margin="10dp" />
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal" android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/txtClassDepartment"
-            android:layout_width="wrap_content"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textColor = "#000"
-            android:text="Dept" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
+            android:text="Dept"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textColor = "#000"
+            android:textColor="#000" />
+
+        <TextView
             android:id="@+id/txtClassNumber"
-            android:text="Class Num"/>
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
+            android:text="Class Num"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textColor = "#000"
+            android:textColor="#000" />
+
+        <TextView
             android:id="@+id/txtSectionNumber"
-            android:text="Section Num"/>
+            android:layout_width="127dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Section Num"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="#000" />
     </LinearLayout>
     <ListView
         android:id="@+id/listViewSections"

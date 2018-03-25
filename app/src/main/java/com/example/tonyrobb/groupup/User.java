@@ -13,7 +13,7 @@ public class User {
     private String bio;
     private String major;
     private String skills;
-    //private Uri profilePicUrl;
+    private String profilePicUrl;
     private boolean isProf;
     private HashMap<String,Section> sectionsEnrolledIn;
 
@@ -30,7 +30,7 @@ public class User {
         bio = "";
         major = "";
         skills = "";
-        //this.profilePicUrl = Uri.parse("https://firebasestorage.googleapis.com/v0/b/groupup-cc709.appspot.com/o/profile_pictures%2Fdefault_pic.jpg?alt=media&token=447fe1a9-ffd1-41f9-ac45-d6937b0fe825");
+        profilePicUrl = "";
         this.sectionsEnrolledIn = sectionsEnrolledIn;
     }
 
@@ -61,7 +61,7 @@ public class User {
 
     public boolean getIsProf() { return isProf; }
 
-    //public Uri getDefaultProfilePic() { return profilePicUrl; }
+    public String getProfilePicUrl() { return profilePicUrl; }
 
     public HashMap<String,Section> getSectionsEnrolledIn() {
         return sectionsEnrolledIn;
@@ -77,5 +77,9 @@ public class User {
 
     public void setSkills(String skills) {
         this.skills = skills;
+    }
+
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
     }
 }
