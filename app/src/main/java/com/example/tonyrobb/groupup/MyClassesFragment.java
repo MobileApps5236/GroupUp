@@ -62,9 +62,10 @@ public class MyClassesFragment extends Fragment {
                 }
                 Log.i("UserID?", currentUser.getUid());
 
-
-                MyClassesAdapter adapter = new MyClassesAdapter(getActivity(), sectionList);
-                listViewSections.setAdapter(adapter);
+                if (getActivity() != null) {
+                    MyClassesAdapter adapter = new MyClassesAdapter(getActivity(), sectionList);
+                    listViewSections.setAdapter(adapter);
+                }
             }
 
             @Override
