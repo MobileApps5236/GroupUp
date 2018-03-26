@@ -32,10 +32,6 @@ public class ClassRosterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_class_roster, container, false);
-        /*
-            TODO: 1. Get the sectionID as bundle and get database referance to userID list
-            TODO: 2. Loop through user id list and get user names.
-         */
 
         String sectionId = null;
         String classId = null;
