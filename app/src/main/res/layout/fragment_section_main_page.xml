@@ -13,11 +13,11 @@
 
 
         <TextView
-            android:id="@+id/sectionName"
+            android:id="@+id/txtSectionTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="Section Name"
+            android:text=""
             android:textAlignment="center"
             android:textColor="@android:color/background_dark"
             android:textSize="40sp" />

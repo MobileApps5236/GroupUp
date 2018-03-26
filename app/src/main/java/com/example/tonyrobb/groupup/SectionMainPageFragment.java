@@ -20,26 +20,28 @@ public class SectionMainPageFragment extends Fragment {
     private Button btnDiscussionBoard, btnGroups, btnClassRoster;
     private TextView sectionName;
     DatabaseReference databaseSections;
+    DatabaseReference databaseClasses;
     private String sectionId;
+    String sectionTitle;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_section_main_page, container, false);
         databaseSections = FirebaseDatabase.getInstance().getReference("sections");
+        databaseClasses = FirebaseDatabase.getInstance().getReference("classes");
 
 
         btnDiscussionBoard = (Button) v.findViewById(R.id.button_discussion_board);
         btnGroups = (Button) v.findViewById(R.id.button_groups);
         btnClassRoster = (Button) v.findViewById(R.id.button_class_roster);
-        sectionName = (TextView) v.findViewById(R.id.sectionName);
+        sectionName = (TextView) v.findViewById(R.id.txtSectionTitle);
 
         btnDiscussionBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                TODO: implement onclick listeners
                 MyClassesFragment fragment = new MyClassesFragment();
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "myClasses").addToBackStack(null).commit();
             }
         });
 
@@ -47,7 +49,6 @@ public class SectionMainPageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ClassListFragment fragment = new ClassListFragment();
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "toEnroll").addToBackStack(null).commit();
             }
         });
 
@@ -55,9 +56,6 @@ public class SectionMainPageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MyProfileFragment myProfileFragment = new MyProfileFragment();
-                //getActivity().getSupportFragmentManager().beginTransaction()
-                        //.replace(R.id.fragment_container, myProfileFragment, "toMyProfile")
-                        //.addToBackStack(null).commit();
             }
         });
 
@@ -72,12 +70,13 @@ public class SectionMainPageFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 sectionId = getArguments().getString("sectionId");
-
                 //User user = dataSnapshot.getValue(User.class);
                 for(DataSnapshot sectionSnapshot : dataSnapshot.getChildren()){
-                    if (sectionSnapshot.hasChild(sectionId)) {
-                        String className = sectionSnapshot.getKey();
-                        sectionName.setText(className);
+                    for(DataSnapshot classSnapshot : sectionSnapshot.getChildren()) {
+                        Section curSection = classSnapshot.getValue(Section.class);
+                        if (curSection.getSectionNumber() == Integer.parseInt(sectionId)) {
+                            sectionTitle = sectionSnapshot.getKey();
+                        }
                     }
                 }
 
@@ -87,6 +86,26 @@ public class SectionMainPageFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+        });
+
+        databaseClasses.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot classSnapshot : dataSnapshot.getChildren()){
+                    if (classSnapshot.getKey().equals(sectionTitle)) {
+                        Class aClass = classSnapshot.getValue(Class.class);
+                        sectionName.setText(aClass.getClassName());
+                    }
+                }
+
+                }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
         });
     }
 }
