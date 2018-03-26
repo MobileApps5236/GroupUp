@@ -3,14 +3,11 @@ package com.example.tonyrobb.groupup;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,38 +19,34 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GroupsListFragment extends Fragment {
 
     DatabaseReference databaseSections;
     ListView listViewSections;
-    String dept;
-    int classNum;
-    List<Section> sectionList;
+    List<Group> groupList;
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-    String sectionId;
+    String sectionId = getArguments().getString("sectionId");
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_my_classes, container, false);
-        databaseSections = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).child("sectionsEnrolledIn");
+        View v = inflater.inflate(R.layout.fragment_groupslist_list, container, false);
+        databaseSections = FirebaseDatabase.getInstance().getReference("sections").child(getArguments().getString("className")).child(sectionId).child("groupsMade");
         listViewSections = (ListView) v.findViewById(R.id.listViewSections);
-        sectionList = new ArrayList<Section>();
+        groupList = new ArrayList<Group>();
 
         listViewSections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Section aSection = sectionList.get(i);
-                SectionMainPageFragment fragment = new SectionMainPageFragment();
+                Group aGroup = groupList.get(i);
+                GroupPageFragment fragment = new GroupPageFragment();
                 Bundle args = new Bundle();
-                args.putString("sectionId", aSection.getSectionId());
+                args.putString("sectionId", sectionId);
 
                 fragment.setArguments(args);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "toSectionMainPages").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "toGroupPage").addToBackStack(null).commit();
 
             }
         });
@@ -69,17 +62,17 @@ public class GroupsListFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                sectionList.clear();
+                groupList.clear();
                 //User user = dataSnapshot.getValue(User.class);
-                for(DataSnapshot sectionSnapshot : dataSnapshot.getChildren()){
-                    Section section = sectionSnapshot.getValue(Section.class);
+                for(DataSnapshot groupSnapshot : dataSnapshot.getChildren()){
+                    Group group = groupSnapshot.getValue(Group.class);
                     System.out.println("HEY");
-                    sectionList.add(section);
+                    groupList.add(group);
                 }
                 Log.i("UserID?", currentUser.getUid());
 
                 if (getActivity() != null) {
-                    MyClassesAdapter adapter = new MyClassesAdapter(getActivity(), sectionList);
+                    GroupsListAdapter adapter = new GroupsListAdapter(getActivity(), groupList);
                     listViewSections.setAdapter(adapter);
                 }
             }

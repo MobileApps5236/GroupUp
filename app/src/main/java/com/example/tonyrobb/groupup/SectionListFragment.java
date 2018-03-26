@@ -141,8 +141,9 @@ public class SectionListFragment extends Fragment {
         if (!TextUtils.isEmpty(sectionNumber)) {
             String id = databaseSections.push().getKey();
             HashMap<String, User> enrolledUsers = new HashMap<>();
+            HashMap<String, Group> groupsMade = new HashMap<>();
 
-            Section section = new Section(id, Integer.parseInt(sectionNumber), enrolledUsers);
+            Section section = new Section(id, Integer.parseInt(sectionNumber), enrolledUsers, groupsMade);
             databaseSections.child(id).setValue(section);
         }
     }

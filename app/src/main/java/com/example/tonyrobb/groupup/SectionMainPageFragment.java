@@ -23,6 +23,7 @@ public class SectionMainPageFragment extends Fragment {
     DatabaseReference databaseClasses;
     private String sectionId;
     private String classId;
+    private String className;
 
     @Nullable
     @Override
@@ -53,8 +54,12 @@ public class SectionMainPageFragment extends Fragment {
         btnGroups.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassListFragment fragment = new ClassListFragment();
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "toEnroll").addToBackStack(null).commit();
+                GroupsListFragment fragment = new GroupsListFragment();
+                Bundle args = new Bundle();
+                args.putString("sectionId", sectionId);
+                args.putString("className", className);
+                fragment.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "groupList").addToBackStack(null).commit();
             }
         });
 
@@ -105,7 +110,7 @@ public class SectionMainPageFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String className = dataSnapshot.child(classId).getValue(Class.class).getClassName();
+                className = dataSnapshot.child(classId).getValue(Class.class).getClassName();
                 sectionName.setText(className);
 
             }

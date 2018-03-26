@@ -11,16 +11,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class GroupsListAdapter extends ArrayAdapter<Section> {
+public class GroupsListAdapter extends ArrayAdapter<Group> {
     private Activity context;
-    private List<Section> sectionList;
+    private List<Group> groupList;
     private String dept;
     private int classNum;
 
-    public GroupsListAdapter(Activity context, List<Section> sectionList){
-        super(context, R.layout.my_classes, sectionList);
+    public GroupsListAdapter(Activity context, List<Group> groupList){
+        super(context, R.layout.groups_list, groupList);
         this.context = context;
-        this.sectionList = sectionList;
+        this.groupList = groupList;
     }
 
     @NonNull
@@ -28,12 +28,12 @@ public class GroupsListAdapter extends ArrayAdapter<Section> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
 
-        View listViewItem = inflater.inflate(R.layout.my_classes, null, false);
+        View listViewItem = inflater.inflate(R.layout.groups_list, null, false);
 
-        TextView deptTextView = (TextView) listViewItem.findViewById(R.id.txtSectionID);
+        TextView deptTextView = (TextView) listViewItem.findViewById(R.id.txtGroupName);
 
-        String section = Integer.toString(sectionList.get(position).getSectionNumber());
-        deptTextView.setText(section);
+        String group = groupList.get(position).getGroupName();
+        deptTextView.setText(group);
         return listViewItem;
     }
 }
