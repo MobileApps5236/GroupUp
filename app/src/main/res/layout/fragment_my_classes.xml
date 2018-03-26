@@ -21,7 +21,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/listViewUsers"
+        android:id="@+id/listViewSections"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
