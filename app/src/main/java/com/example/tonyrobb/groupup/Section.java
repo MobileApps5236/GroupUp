@@ -10,6 +10,7 @@ public class Section {
     private String sectionId;
     private int sectionNumber;
     private HashMap<String, User> enrolledUsers;
+    private HashMap<String,Group> groupsMade;
 
     public Section(){
 

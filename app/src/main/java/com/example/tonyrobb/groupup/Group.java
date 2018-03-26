@@ -1,6 +1,8 @@
 package com.example.tonyrobb.groupup;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,19 +15,19 @@ public class Group {
     private int groupLimit;
     private String groupOwnerUId;
     private String sectionId;
-    private List<String> groupMembers;
+    private String groupMembers;
 
     public Group() {
 
     }
 
-    public Group(String groupId, String groupName, int groupLimit, String groupOwnerUId, String sectionId, List<String> groupMembers) {
+    public Group(String groupId, String groupName, int groupLimit, String groupOwnerUId, String sectionId, String groupMembers) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.groupLimit = groupLimit;
         this.groupOwnerUId = groupOwnerUId;
         this.sectionId = sectionId;
-        this.groupMembers = new ArrayList<String>();
+        this.groupMembers = groupMembers;
     }
 
     public String getGroupId() { return groupId; }
@@ -38,16 +40,28 @@ public class Group {
 
     public String getSectionId() { return sectionId; }
 
-    public List<String> getGroupMembers() { return groupMembers; }
+    public String getGroupMembers() { return groupMembers; }
 
     public void addMember(String addedMemberUId) {
-        groupMembers.add(addedMemberUId);
+        groupMembers += " " + addedMemberUId;
     }
 
     public boolean removeMember(String removedMemberId) {
         boolean isRemoved = false;
         if (groupMembers.contains(removedMemberId)) {
-            groupMembers.remove(groupMembers.indexOf(removedMemberId));
+            String[] groupArray = groupMembers.split(" ");
+            String[] newArray = new String[groupArray.length - 1];
+            for (int i = 0; i < groupArray.length; i++) {
+                if (groupArray[i].equals(removedMemberId)) {
+                    // Do nothing
+                } else {
+                    newArray[i] = groupArray[i];
+                }
+            }
+            String newString = newArray[0];
+            for (int i = 1; i < newArray.length; i++) {
+                newString += " " + newArray[i];
+            }
             isRemoved = true;
         }
 
