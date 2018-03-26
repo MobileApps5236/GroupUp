@@ -20,6 +20,7 @@ public class SectionMainPageFragment extends Fragment {
     private Button btnDiscussionBoard, btnGroups, btnClassRoster, btnMyGroup;
     private TextView sectionName;
     DatabaseReference databaseSections;
+    DatabaseReference databaseClasses;
     private String sectionId;
     private String classId;
 
@@ -28,6 +29,7 @@ public class SectionMainPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_section_main_page, container, false);
         databaseSections = FirebaseDatabase.getInstance().getReference("sections");
+        databaseClasses = FirebaseDatabase.getInstance().getReference("classes");
 
 
         btnDiscussionBoard = (Button) v.findViewById(R.id.button_discussion_board);
@@ -89,11 +91,22 @@ public class SectionMainPageFragment extends Fragment {
                 for(DataSnapshot sectionSnapshot : dataSnapshot.getChildren()){
                     if (sectionSnapshot.hasChild(sectionId)) {
                         classId = sectionSnapshot.getKey();
-
-                        String className = sectionSnapshot.getKey();            // This will probably get the class key, use this to get the class name from the class table
-                        sectionName.setText(className);
                     }
                 }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        databaseClasses.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                String className = dataSnapshot.child(classId).getValue(Class.class).getClassName();
+                sectionName.setText(className);
 
             }
 
