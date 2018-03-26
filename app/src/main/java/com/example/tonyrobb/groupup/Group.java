@@ -50,6 +50,18 @@ public class Group {
         return sectionId;
     }
 
+    public void setGroupOwnerUId(String groupOwnerUId) {
+        this.groupOwnerUId = groupOwnerUId;
+    }
+
+    public void setSectionId(String sectionId) {
+        this.sectionId = sectionId;
+    }
+
+    public void setGroupMembers(HashMap<String, User> groupMembers) {
+        this.groupMembers = groupMembers;
+    }
+
     public HashMap<String, User> getGroupMembers() {
         return groupMembers;
     }

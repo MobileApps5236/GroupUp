@@ -9,17 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:hint="Add a Section"
-        android:visibility="gone"
-        android:inputType="number" />
+        android:hint="Enter Group Name"
+        android:visibility="visible" />
 
     <Button
+        android:id="@+id/btnAddGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="Add Group"
-        android:visibility="gone"
-        android:id="@+id/btnAddGroup"
-        android:layout_margin="10dp" />
+        android:visibility="visible" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -37,8 +36,9 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="#000" />
     </LinearLayout>
+
     <ListView
-        android:id="@+id/listViewSections"
+        android:id="@+id/listViewGroups"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

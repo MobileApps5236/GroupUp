@@ -145,6 +145,8 @@ public class SectionListFragment extends Fragment {
 
             Section section = new Section(id, Integer.parseInt(sectionNumber), enrolledUsers, groupsMade);
             databaseSections.child(id).setValue(section);
+        } else {
+            Toast.makeText(getActivity(), "Enter a Section Number", Toast.LENGTH_SHORT).show();
         }
     }
 

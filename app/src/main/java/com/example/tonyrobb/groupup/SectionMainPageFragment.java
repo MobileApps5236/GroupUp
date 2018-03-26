@@ -57,7 +57,7 @@ public class SectionMainPageFragment extends Fragment {
                 GroupsListFragment fragment = new GroupsListFragment();
                 Bundle args = new Bundle();
                 args.putString("sectionId", sectionId);
-                args.putString("className", className);
+                args.putString("classId", classId);
                 fragment.setArguments(args);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "groupList").addToBackStack(null).commit();
             }
