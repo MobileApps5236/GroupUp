@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,6 +42,7 @@ public class SectionListFragment extends Fragment {
     List<Section> sectionList;
 
     DatabaseReference user;
+    User enrolledUser;
     FirebaseAuth auth;
 
     @Nullable
@@ -70,7 +72,14 @@ public class SectionListFragment extends Fragment {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                user.child("sectionsEnrolledIn").child(sectionList.get(pos).getSectionId()).setValue(sectionList.get(pos));
+                                user.child("sectionsEnrolledIn").child(sectionList.get(pos)
+                                        .getSectionId()).setValue(sectionList.get(pos));
+
+                                HashMap<String, String> userId = new HashMap<>();
+                                userId.put("userId", enrolledUser.getUserId());
+                                databaseSections.child(sectionList.get(pos).getSectionId())
+                                        .child("enrolledUsers").setValue(userId);
+
                                 Toast.makeText(getActivity(), "Enrollment Successful", Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -101,6 +110,8 @@ public class SectionListFragment extends Fragment {
                     editTextAddSection.setVisibility(View.VISIBLE);
                     btnAddSection.setVisibility(View.VISIBLE);
                 }
+
+                enrolledUser = dataSnapshot.getValue(User.class);
             }
 
             @Override
@@ -135,11 +146,11 @@ public class SectionListFragment extends Fragment {
 
         if (!TextUtils.isEmpty(sectionNumber)) {
             String id = databaseSections.push().getKey();
+            HashMap<String, String> enrolledUsers = new HashMap<>();
 
-            Section section = new Section(id, Integer.parseInt(sectionNumber));
+            Section section = new Section(id, Integer.parseInt(sectionNumber), enrolledUsers);
             databaseSections.child(id).setValue(section);
             Toast.makeText(getActivity(), "Section Created Successfully", Toast.LENGTH_SHORT).show();
         }
-
     }
 }
