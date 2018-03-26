@@ -150,7 +150,6 @@ public class SectionListFragment extends Fragment {
 
             Section section = new Section(id, Integer.parseInt(sectionNumber), enrolledUsers);
             databaseSections.child(id).setValue(section);
-            Toast.makeText(getActivity(), "Section Created Successfully", Toast.LENGTH_SHORT).show();
         }
     }
 }

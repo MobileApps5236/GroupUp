@@ -32,8 +32,9 @@ public class MyClassesFragment extends Fragment {
     ListView listViewSections;
     String dept;
     int classNum;
-    List<String> sectionList;
+    List<Section> sectionList;
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    String sectionId;
 
     @Nullable
     @Override
@@ -41,15 +42,15 @@ public class MyClassesFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_my_classes, container, false);
         databaseSections = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).child("sectionsEnrolledIn");
         listViewSections = (ListView) v.findViewById(R.id.listViewSections);
-        sectionList = new ArrayList<String>();
+        sectionList = new ArrayList<Section>();
 
         listViewSections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String aSection = sectionList.get(i);
+                Section aSection = sectionList.get(i);
                 SectionMainPageFragment fragment = new SectionMainPageFragment();
                 Bundle args = new Bundle();
-                args.putString("sectionId", aSection);
+                args.putString("sectionId", aSection.getSectionId());
 
                 fragment.setArguments(args);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "toSectionMainPages").addToBackStack(null).commit();
@@ -73,7 +74,7 @@ public class MyClassesFragment extends Fragment {
                 for(DataSnapshot sectionSnapshot : dataSnapshot.getChildren()){
                     Section section = sectionSnapshot.getValue(Section.class);
                     System.out.println("HEY");
-                    sectionList.add(Integer.toString(section.getSectionNumber()));
+                    sectionList.add(section);
                 }
                 Log.i("UserID?", currentUser.getUid());
 

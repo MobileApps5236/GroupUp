@@ -30,7 +30,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="30dp"
             android:enabled="true"
-            android:text="My Classes and Groups"
+            android:text="Forum"
             android:textColor="@android:color/background_dark"
             android:theme="@style/AppTheme" />
 

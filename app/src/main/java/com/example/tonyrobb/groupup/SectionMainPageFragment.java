@@ -38,8 +38,11 @@ public class SectionMainPageFragment extends Fragment {
             @Override
             public void onClick(View v) {
 //                TODO: implement onclick listeners
-                MyClassesFragment fragment = new MyClassesFragment();
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "myClasses").addToBackStack(null).commit();
+                ForumFragment fragment = new ForumFragment();
+                Bundle args = new Bundle();
+                args.putString("sectionId", sectionId);
+                fragment.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "forum").addToBackStack(null).commit();
             }
         });
 
