@@ -12,11 +12,11 @@ import android.widget.TextView;
 import java.util.List;
 
 
-public class ClassRosterAdapter extends ArrayAdapter<String> {
+public class ClassRosterAdapter extends ArrayAdapter<User> {
     private Activity context;
-    private List<String> userList;
+    private List<User> userList;
 
-    public ClassRosterAdapter(Activity context, List<String> userList){
+    public ClassRosterAdapter(Activity context, List<User> userList){
         super(context, R.layout.class_roster, userList);
         this.context = context;
         this.userList = userList;
@@ -31,7 +31,7 @@ public class ClassRosterAdapter extends ArrayAdapter<String> {
 
         TextView nameTextView = (TextView) listViewItem.findViewById(R.id.txt_name);
 
-        String userName = userList.get(position);
+        String userName = userList.get(position).getFirstName() + " " + userList.get(position).getLastName();
         nameTextView.setText(userName);
         return listViewItem;
     }

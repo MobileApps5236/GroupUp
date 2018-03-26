@@ -21,6 +21,7 @@ public class SectionMainPageFragment extends Fragment {
     private TextView sectionName;
     DatabaseReference databaseSections;
     private String sectionId;
+    private String classId;
 
     @Nullable
     @Override
@@ -37,7 +38,7 @@ public class SectionMainPageFragment extends Fragment {
         btnDiscussionBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                TODO: implement onclick listeners
+
                 ForumFragment fragment = new ForumFragment();
                 Bundle args = new Bundle();
                 args.putString("sectionId", sectionId);
@@ -57,10 +58,17 @@ public class SectionMainPageFragment extends Fragment {
         btnClassRoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyProfileFragment myProfileFragment = new MyProfileFragment();
-                //getActivity().getSupportFragmentManager().beginTransaction()
-                        //.replace(R.id.fragment_container, myProfileFragment, "toMyProfile")
-                        //.addToBackStack(null).commit();
+                ClassRosterFragment classRosterFragment = new ClassRosterFragment();
+
+                Bundle args = new Bundle();
+                args.putString("classId", classId);
+                args.putString("sectionId", sectionId);
+
+                classRosterFragment.setArguments(args);
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, classRosterFragment, "toMyProfile")
+                        .addToBackStack(null).commit();
             }
         });
 
@@ -79,7 +87,9 @@ public class SectionMainPageFragment extends Fragment {
                 //User user = dataSnapshot.getValue(User.class);
                 for(DataSnapshot sectionSnapshot : dataSnapshot.getChildren()){
                     if (sectionSnapshot.hasChild(sectionId)) {
-                        String className = sectionSnapshot.getKey();
+                        classId = sectionSnapshot.getKey();
+
+                        String className = sectionSnapshot.getKey();            // This will probably get the class key, use this to get the class name from the class table
                         sectionName.setText(className);
                     }
                 }

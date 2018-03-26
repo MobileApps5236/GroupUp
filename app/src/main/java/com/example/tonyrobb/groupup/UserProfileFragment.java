@@ -36,10 +36,10 @@ public class UserProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        String userID = null;
+        String userId = null;
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            userID = bundle.getString("userID");
+            userId = bundle.getString("userId");
         }
 
         txtName = (TextView) v.findViewById(R.id.txt_name);
@@ -52,9 +52,9 @@ public class UserProfileFragment extends Fragment {
 
         disableClickableFields();
 
-        if (userID != null) {
+        if (userId != null) {
             databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users")
-                    .child(userID);
+                    .child(userId);
             mProgress = new ProgressDialog(getContext());
 
             populateFields(databaseCurrentUser);
