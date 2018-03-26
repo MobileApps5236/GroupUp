@@ -75,9 +75,10 @@ public class SectionListFragment extends Fragment {
                                 user.child("sectionsEnrolledIn").child(sectionList.get(pos)
                                         .getSectionId()).setValue(sectionList.get(pos));
 
+                                HashMap<String, String> userId = new HashMap<>();
+                                userId.put("userId", enrolledUser.getUserId());
                                 databaseSections.child(sectionList.get(pos).getSectionId())
-                                        .child("enrolledUsers").child(enrolledUser.getUserId())
-                                        .setValue(enrolledUser);
+                                        .child("enrolledUsers").setValue(userId);
 
                                 Toast.makeText(getActivity(), "Enrollment Successful", Toast.LENGTH_SHORT).show();
                             }
@@ -145,7 +146,7 @@ public class SectionListFragment extends Fragment {
 
         if (!TextUtils.isEmpty(sectionNumber)) {
             String id = databaseSections.push().getKey();
-            HashMap<String, User> enrolledUsers = new HashMap<>();
+            HashMap<String, String> enrolledUsers = new HashMap<>();
 
             Section section = new Section(id, Integer.parseInt(sectionNumber), enrolledUsers);
             databaseSections.child(id).setValue(section);
