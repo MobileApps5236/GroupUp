@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -41,6 +42,20 @@ public class MyClassesFragment extends Fragment {
         databaseSections = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).child("sectionsEnrolledIn");
         listViewSections = (ListView) v.findViewById(R.id.listViewSections);
         sectionList = new ArrayList<String>();
+
+        listViewSections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String aSection = sectionList.get(i);
+                SectionMainPageFragment fragment = new SectionMainPageFragment();
+                Bundle args = new Bundle();
+                args.putString("sectionId", aSection);
+
+                fragment.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "toSectionMainPages").addToBackStack(null).commit();
+
+            }
+        });
 
         return v;
     }
