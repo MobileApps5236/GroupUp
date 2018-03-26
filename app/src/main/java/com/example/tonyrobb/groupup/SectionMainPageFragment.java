@@ -17,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class SectionMainPageFragment extends Fragment {
-    private Button btnDiscussionBoard, btnGroups, btnClassRoster;
+    private Button btnDiscussionBoard, btnGroups, btnClassRoster, btnMyGroup;
     private TextView sectionName;
     DatabaseReference databaseSections;
     private String sectionId;
@@ -33,7 +33,8 @@ public class SectionMainPageFragment extends Fragment {
         btnDiscussionBoard = (Button) v.findViewById(R.id.button_discussion_board);
         btnGroups = (Button) v.findViewById(R.id.button_groups);
         btnClassRoster = (Button) v.findViewById(R.id.button_class_roster);
-        sectionName = (TextView) v.findViewById(R.id.sectionName);
+        btnMyGroup = (Button) v.findViewById(R.id.button_my_group);
+        sectionName = (TextView) v.findViewById(R.id.section_name);
 
         btnDiscussionBoard.setOnClickListener(new View.OnClickListener() {
             @Override

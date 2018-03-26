@@ -4,14 +4,14 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/txt_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        android:hint="Name"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor = "#000"
-        android:id="@+id/txtName"
-        android:hint="Name"/>
+        android:textColor="#000" />
 </LinearLayout>
