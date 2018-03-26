@@ -97,8 +97,9 @@ public class CreateAccountFragment extends Fragment {
     private void addUser(String email, String firstName, String lastName, boolean isProf){
         String userId = auth.getCurrentUser().getUid();
         HashMap<String,Section> sectionsList = new HashMap<>();
+        HashMap<String, Group> enrolledInGroup = new HashMap<>();
 
-        User user = new User(userId, email, firstName, lastName, isProf, sectionsList);
+        User user = new User(userId, email, firstName, lastName, isProf, sectionsList, enrolledInGroup);
         databaseUsers.child(userId).setValue(user);
     }
 }
