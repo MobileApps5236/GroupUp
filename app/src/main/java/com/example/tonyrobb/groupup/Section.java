@@ -9,13 +9,13 @@ import java.util.HashMap;
 public class Section {
     private String sectionId;
     private int sectionNumber;
-    private HashMap<String, String> enrolledUsers;
+    private HashMap<String, User> enrolledUsers;
 
     public Section(){
 
     }
 
-    public Section(String sectionId, int sectionNumber, HashMap<String, String> enrolledUsers) {
+    public Section(String sectionId, int sectionNumber, HashMap<String, User> enrolledUsers) {
         this.sectionId = sectionId;
         this.sectionNumber = sectionNumber;
         this.enrolledUsers = enrolledUsers;
@@ -29,7 +29,7 @@ public class Section {
         return sectionNumber;
     }
 
-    public HashMap<String, String> getEnrolledUsers() {
+    public HashMap<String, User> getEnrolledUsers() {
         return enrolledUsers;
     }
 }

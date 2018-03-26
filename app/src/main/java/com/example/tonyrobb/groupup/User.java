@@ -82,4 +82,13 @@ public class User {
     public void setProfilePicUrl(String profilePicUrl) {
         this.profilePicUrl = profilePicUrl;
     }
+
+    public void setSectionsEnrolledIn(HashMap<String,Section> sectionsEnrolledIn){
+        this.sectionsEnrolledIn = sectionsEnrolledIn;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
 }
