@@ -25,7 +25,8 @@ public class GroupPageFragment extends Fragment {
 
     DatabaseReference databaseCurrentGroup, databaseGroupMembers;
     Group currentGroup;
-    Button joinGroupBtn;
+    Button btnJoinGroup, btnAddMember, btnRemoveMember;
+
 
     ListView listViewMembers;
     List<User> userList;
@@ -46,16 +47,10 @@ public class GroupPageFragment extends Fragment {
             groupId = bundle.getString("groupId");
         }
         editUserEmail = v.findViewById(R.id.edit_user_email);
-        Button btnJoinGroup = v.findViewById(R.id.btn_join_group);
-        Button btnAddMember = v.findViewById(R.id.btn_add_member);
-        Button btnRemoveMember = v.findViewById(R.id.btn_remove_member);
-        if (FirebaseAuth.getInstance().getUid().equals(currentGroup.getGroupOwnerUId())){
-            btnJoinGroup.setVisibility(View.GONE);
-        } else {
-            editUserEmail.setVisibility(View.GONE);
-            btnAddMember.setVisibility(View.GONE);
-            btnRemoveMember.setVisibility(View.GONE);
-        }
+        btnJoinGroup = v.findViewById(R.id.btn_join_group);
+        btnAddMember = v.findViewById(R.id.btn_add_member);
+        btnRemoveMember = v.findViewById(R.id.btn_remove_member);
+
         databaseCurrentGroup = FirebaseDatabase.getInstance().getReference("groups").child(groupId);
         databaseGroupMembers = databaseCurrentGroup.child("groupMembers");
 
@@ -115,6 +110,14 @@ public class GroupPageFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentGroup = dataSnapshot.getValue(Group.class);
+
+                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(currentGroup.getGroupOwnerUId())){
+                    btnJoinGroup.setVisibility(View.GONE);
+                } else {
+                    editUserEmail.setVisibility(View.GONE);
+                    btnAddMember.setVisibility(View.GONE);
+                    btnRemoveMember.setVisibility(View.GONE);
+                }
             }
 
             @Override
