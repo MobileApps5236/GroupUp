@@ -160,6 +160,7 @@ public class SectionListFragment extends Fragment {
         enrolledUser.setEmail(null);
         enrolledUser.setProfilePicUrl(null);
         enrolledUser.setSectionsEnrolledIn(null);
+        enrolledUser.setEnrolledInGroup(null);
 
         databaseSections.child(currentSection.getSectionId()).child("enrolledUsers")
                 .child(enrolledUser.getUserId()).setValue(enrolledUser);

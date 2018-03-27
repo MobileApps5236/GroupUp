@@ -28,7 +28,7 @@ import java.util.List;
 
 public class GroupsListFragment extends Fragment {
 
-    DatabaseReference databaseGroups, databaseCurrentSection;
+    DatabaseReference databaseGroups, databaseCurrentSection, databaseGroupOwner;
     ListView listViewGroups;
     List<Group> groupList;
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -52,6 +52,9 @@ public class GroupsListFragment extends Fragment {
         databaseGroups = FirebaseDatabase.getInstance().getReference("groups");
         databaseCurrentSection = FirebaseDatabase.getInstance().getReference("sections")
                 .child(classId).child(sectionId);
+        databaseGroupOwner = FirebaseDatabase.getInstance().getReference("users")
+                .child(currentUser.getUid());
+
         listViewGroups = (ListView) v.findViewById(R.id.listViewGroups);
         groupList = new ArrayList<Group>();
 
@@ -133,7 +136,8 @@ public class GroupsListFragment extends Fragment {
         currentGroup.setGroupOwnerUId(null);
         currentGroup.setSectionId(null);
 
-        databaseCurrentSection.child("groupsMade").setValue(currentGroup);
+        databaseCurrentSection.child("groupsMade").child(currentGroup.getGroupId()).setValue(currentGroup);
+        databaseGroupOwner.child("enrolledInGroup").child(currentGroup.getGroupId()).setValue(currentGroup);
     }
 
 }
