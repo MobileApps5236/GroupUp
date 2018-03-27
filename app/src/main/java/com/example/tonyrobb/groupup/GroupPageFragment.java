@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class GroupPageFragment extends Fragment {
 
-    DatabaseReference databaseCurrentGroup;
+    DatabaseReference databaseCurrentGroup, databaseGroupMembers;
     Group currentGroup;
 
     ListView listViewMembers;
@@ -44,11 +45,12 @@ public class GroupPageFragment extends Fragment {
         }
 
         editUserEmail = v.findViewById(R.id.edit_user_email);
-        Button btnJoinGroup = v.findViewById(R.id.btn_join_group);
-        Button btnAddMember = v.findViewById(R.id.btn_add_member);
-        Button btnRemoveMember = v.findViewById(R.id.btn_remove_member);
+        final Button btnJoinGroup = v.findViewById(R.id.btn_join_group);
+        final Button btnAddMember = v.findViewById(R.id.btn_add_member);
+        final Button btnRemoveMember = v.findViewById(R.id.btn_remove_member);
 
-        databaseCurrentGroup = FirebaseDatabase.getInstance().getReference("groups").child(groupId).child("groupMembers");
+        databaseCurrentGroup = FirebaseDatabase.getInstance().getReference("groups").child(groupId);
+        databaseGroupMembers = databaseCurrentGroup.child("groupMembers");
 
         listViewMembers = (ListView) v.findViewById(R.id.listViewMembers);
         userList = new ArrayList<User>();
@@ -68,6 +70,14 @@ public class GroupPageFragment extends Fragment {
                         .replace(R.id.fragment_container, userProfileFragment, "toUserProfile")
                         .addToBackStack(null).commit();
 
+                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(currentGroup.getGroupOwnerUId())){
+                    btnJoinGroup.setVisibility(View.GONE);
+                } else {
+                    editUserEmail.setVisibility(View.GONE);
+                    btnAddMember.setVisibility(View.GONE);
+                    btnRemoveMember.setVisibility(View.GONE);
+                }
+
             }
         });
 
@@ -78,7 +88,7 @@ public class GroupPageFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        databaseCurrentGroup.addValueEventListener(new ValueEventListener() {
+        databaseGroupMembers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -86,7 +96,7 @@ public class GroupPageFragment extends Fragment {
 
                 currentGroup = dataSnapshot.getValue(Group.class);
 
-                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     User user = userSnapshot.getValue(User.class);
                     userList.add(user);
                 }
@@ -102,7 +112,21 @@ public class GroupPageFragment extends Fragment {
 
             }
         });
+
+        databaseCurrentGroup.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentGroup = dataSnapshot.getValue(Group.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
+
+
 
     private void joinGroup(){
 

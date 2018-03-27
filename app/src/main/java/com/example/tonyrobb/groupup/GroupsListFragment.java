@@ -155,7 +155,6 @@ public class GroupsListFragment extends Fragment {
         ownerUser.setBio(null);
         ownerUser.setSkills(null);
         ownerUser.setMajor(null);
-        ownerUser.setEmail(null);
         ownerUser.setProfilePicUrl(null);
         ownerUser.setSectionsEnrolledIn(null);
         ownerUser.setEnrolledInGroup(null);
