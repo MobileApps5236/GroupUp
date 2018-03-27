@@ -6,7 +6,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/txtSectionID"
+        android:id="@+id/txtClassDepartment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -16,6 +16,28 @@
         android:layout_marginRight="10dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:textColor = "#000"
-        android:hint="SectionID" />
+        android:hint="Department" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor = "#000"
+        android:id="@+id/txtClassNumber"
+        android:hint="Number"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor = "#000"
+        android:id="@+id/txtSectionNumber"
+        android:hint="Name"/>
 
 </FrameLayout>

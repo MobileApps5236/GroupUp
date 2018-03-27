@@ -11,16 +11,18 @@ public class Section {
     private int sectionNumber;
     private HashMap<String, User> enrolledUsers;
     private HashMap<String,Group> groupsMade;
+    private String classId;
 
     public Section(){
 
     }
 
-    public Section(String sectionId, int sectionNumber, HashMap<String, User> enrolledUsers, HashMap<String, Group> groupsMade) {
+    public Section(String sectionId, int sectionNumber, String classId,HashMap<String, User> enrolledUsers, HashMap<String, Group> groupsMade) {
         this.sectionId = sectionId;
         this.sectionNumber = sectionNumber;
         this.enrolledUsers = enrolledUsers;
         this.groupsMade = groupsMade;
+        this.classId = classId;
 
     }
 
@@ -37,4 +39,8 @@ public class Section {
     }
 
     public HashMap<String, Group> getGroupsMade() { return groupsMade;}
+
+    public String getClassId() {
+        return classId;
+    }
 }

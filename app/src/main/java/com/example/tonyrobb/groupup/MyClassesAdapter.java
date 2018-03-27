@@ -30,10 +30,12 @@ public class MyClassesAdapter extends ArrayAdapter<Section> {
 
         View listViewItem = inflater.inflate(R.layout.my_classes, null, false);
 
-        TextView deptTextView = (TextView) listViewItem.findViewById(R.id.txtSectionID);
-
+        TextView sectionNumTextView = (TextView) listViewItem.findViewById(R.id.txtSectionNumber);
+        TextView deptTextView = listViewItem.findViewById(R.id.txtClassDepartment);
+        TextView classNumberTextView = listViewItem.findViewById(R.id.txtClassNumber);
         String section = Integer.toString(sectionList.get(position).getSectionNumber());
-        deptTextView.setText(section);
+
+        sectionNumTextView.setText(section);
         return listViewItem;
     }
 }

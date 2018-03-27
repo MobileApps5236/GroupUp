@@ -9,15 +9,39 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/txtClassDepartment"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Dept"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/txtClassNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
+            android:text="Class Num"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textColor = "#000"
-            android:id="@+id/txtSectionID"
-            android:text="Section Num"/>
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/txtSectionNumber"
+            android:layout_width="127dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Section Num"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="#000" />
+
     </LinearLayout>
 
     <ListView

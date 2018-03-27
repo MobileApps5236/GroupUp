@@ -141,8 +141,8 @@ public class SectionListFragment extends Fragment {
             String id = databaseSections.push().getKey();
             HashMap<String, User> enrolledUsers = new HashMap<>();
             HashMap<String, Group> groupsMade = new HashMap<>();
-
-            Section section = new Section(id, Integer.parseInt(sectionNumber), enrolledUsers, groupsMade);
+            String classId = getArguments().getString("classId");
+            Section section = new Section(id, Integer.parseInt(sectionNumber), classId,enrolledUsers, groupsMade);
             databaseSections.child(id).setValue(section);
         } else {
             Toast.makeText(getActivity(), "Enter a Section Number", Toast.LENGTH_SHORT).show();
