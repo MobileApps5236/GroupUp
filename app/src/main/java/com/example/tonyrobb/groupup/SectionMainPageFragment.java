@@ -85,7 +85,6 @@ public class SectionMainPageFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
         databaseSections.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -94,9 +93,24 @@ public class SectionMainPageFragment extends Fragment {
                 //User user = dataSnapshot.getValue(User.class);
                 for(DataSnapshot sectionSnapshot : dataSnapshot.getChildren()){
                     if (sectionSnapshot.hasChild(sectionId)) {
-                        classId = sectionSnapshot.getKey();
+                        classId = sectionSnapshot.child(sectionId).getValue(Section.class).getClassId();
                     }
                 }
+
+                databaseClasses.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(classId != null) {
+                            className = dataSnapshot.child(classId).getValue(Class.class).getClassName();
+                            sectionName.setText(className);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -105,20 +119,7 @@ public class SectionMainPageFragment extends Fragment {
             }
         });
 
-        databaseClasses.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(classId != null) {
-                    className = dataSnapshot.child(classId).getValue(Class.class).getClassName();
-                    sectionName.setText(className);
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 }
 
