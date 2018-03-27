@@ -16,12 +16,13 @@ public class User {
     private String profilePicUrl;
     private boolean isProf;
     private HashMap<String,Section> sectionsEnrolledIn;
+    private HashMap<String, Group> enrolledInGroup;
 
     public User(){
 
     }
 
-    public User(String userId, String email, String firstName, String lastName, boolean isProf, HashMap<String,Section> sectionsEnrolledIn){
+    public User(String userId, String email, String firstName, String lastName, boolean isProf, HashMap<String,Section> sectionsEnrolledIn, HashMap<String, Group> enrolledInGroup){
         this.userId = userId;
         this.email = email;
         this.firstName = firstName;
@@ -32,6 +33,7 @@ public class User {
         skills = "";
         profilePicUrl = "";
         this.sectionsEnrolledIn = sectionsEnrolledIn;
+        this.enrolledInGroup = enrolledInGroup;
     }
 
 
@@ -67,6 +69,8 @@ public class User {
         return sectionsEnrolledIn;
     }
 
+    public HashMap<String, Group> getEnrolledInGroup() { return enrolledInGroup; }
+
     public void setBio(String bio) {
         this.bio = bio;
     }
@@ -90,5 +94,10 @@ public class User {
     public void setEmail(String email){
         this.email = email;
     }
+
+    public void setEnrolledInGroup(HashMap<String, Group> enrolledInGroup) {
+        this.enrolledInGroup = enrolledInGroup;
+    }
+
 
 }
