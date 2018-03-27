@@ -109,7 +109,7 @@ public class SectionMainPageFragment extends Fragment {
         databaseClasses.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                System.out.println(dataSnapshot.child(classId).getValue(Class.class).getClassName());
                 className = dataSnapshot.child(classId).getValue(Class.class).getClassName();
                 sectionName.setText(className);
 

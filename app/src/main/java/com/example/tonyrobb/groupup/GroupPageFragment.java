@@ -48,7 +48,7 @@ public class GroupPageFragment extends Fragment {
         Button btnAddMember = v.findViewById(R.id.btn_add_member);
         Button btnRemoveMember = v.findViewById(R.id.btn_remove_member);
 
-        databaseCurrentGroup = FirebaseDatabase.getInstance().getReference("groups").child(groupId);
+        databaseCurrentGroup = FirebaseDatabase.getInstance().getReference("groups").child(groupId).child("groupMembers");
 
         listViewMembers = (ListView) v.findViewById(R.id.listViewMembers);
         userList = new ArrayList<User>();
