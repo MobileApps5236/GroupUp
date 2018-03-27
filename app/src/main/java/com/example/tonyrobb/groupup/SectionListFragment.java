@@ -123,8 +123,10 @@ public class SectionListFragment extends Fragment {
                     sectionList.add(section);
                 }
 
-                SectionListAdapter adapter = new SectionListAdapter(getActivity(), sectionList, dept, classNum);
-                listViewSections.setAdapter(adapter);
+                if (getActivity() != null) {
+                    SectionListAdapter adapter = new SectionListAdapter(getActivity(), sectionList, dept, classNum);
+                    listViewSections.setAdapter(adapter);
+                }
             }
 
             @Override
