@@ -1,6 +1,7 @@
 package com.example.tonyrobb.groupup;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -22,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -37,6 +40,7 @@ public class ForumFragment extends Fragment {
     List<MessageThread> threadList;
     FirebaseAuth auth;
     String sectionId;
+    DatabaseReference userReference;
 
 
     @Nullable
@@ -45,12 +49,14 @@ public class ForumFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_forum, container, false);
         sectionId = getArguments().getString("sectionId");
         System.out.println(sectionId);
+        auth = FirebaseAuth.getInstance();
         threadReference = FirebaseDatabase.getInstance().getReference("threads").child(sectionId);
+
         subjectTxt = (EditText) v.findViewById(R.id.createThreadSubject);
         btnCreateThread = v.findViewById(R.id.createThreadBtn);
         listViewThreads = v.findViewById(R.id.threadList);
         threadList = new ArrayList<MessageThread>();
-        auth = FirebaseAuth.getInstance();
+
 
 
         btnCreateThread.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +65,34 @@ public class ForumFragment extends Fragment {
                 addThread();
             }
         });
+        listViewThreads.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MessageThread thread = threadList.get(position);
+                userReference = FirebaseDatabase.getInstance().getReference("users").child(thread.getCreatorId());
+                final Bundle args = new Bundle();
+                args.putString("subject", thread.getSubject());
+                args.putString("threadId", thread.getThread_id());
+                args.putString("threadCreatorId", thread.getCreatorId());
+                userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        System.out.println("HEY");
+                        System.out.println(dataSnapshot.getValue(User.class).getFirstName());
+                        args.putString("userName", dataSnapshot.getValue(User.class).getFirstName() + " " + dataSnapshot.getValue(User.class).getLastName());
+                        MessageListFragment messageListFragment = new MessageListFragment();
+                        messageListFragment.setArguments(args);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, messageListFragment, "toMessageList").addToBackStack(null).commit();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
         return v;
     }
 
@@ -91,7 +125,8 @@ public class ForumFragment extends Fragment {
             String id = threadReference.push().getKey();
             String timeCreated = Calendar.getInstance().getTime().toString();
             String creatorId = auth.getUid();
-            MessageThread thread = new MessageThread(id, timeCreated, subject, creatorId, sectionId);
+            HashMap<String, Message> messages = new HashMap<>();
+            MessageThread thread = new MessageThread(id, timeCreated, subject, creatorId, sectionId, messages);
             threadReference.child(id).setValue(thread);
         }
     }

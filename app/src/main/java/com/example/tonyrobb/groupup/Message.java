@@ -10,19 +10,23 @@ public class Message {
     String messageId;
     String text;
     String timeCreated;
-    boolean isComment;
-    HashMap<String, Message> comments;
+    //boolean isComment;
+    String userId;
+    String threadId;
+   // HashMap<String, Message> comments;
 
     public Message(){
 
     }
 
-    public Message(String messageId, String text, String timeCreated, boolean isComment, HashMap<String, Message> comments){
+    public Message(String messageId, String text, String timeCreated, String userId, String threadId){
         this.messageId = messageId;
         this.text = text;
         this.timeCreated = timeCreated;
-        this.isComment = isComment;
-        this.comments = comments;
+        //this.isComment = isComment;
+        this.userId = userId;
+        //this.comments = comments;
+        this.threadId = threadId;
     }
 
     public String getMessageId() {
@@ -37,7 +41,15 @@ public class Message {
         return timeCreated;
     }
 
-    public boolean isComment() {
-        return isComment;
+//    public boolean isComment() {
+//        return isComment;
+//    }
+
+    public String getUserId(){
+        return userId;
+    }
+
+    public String getThreadId() {
+        return threadId;
     }
 }

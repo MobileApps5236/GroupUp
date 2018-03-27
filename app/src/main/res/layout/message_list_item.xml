@@ -2,19 +2,19 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/nameTxt"/>
+        android:text="Tony Robb"
+        android:id="@+id/byLineTxt"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:textColor="#000"
+        android:id="@+id/messageTxt"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor = "#000"
-        android:id="@+id/threadSubjectTxt"/>
-
+        android:text="personally I think this is a tremendous idea and I could be of assistance because I am well aquainted with developing games using Unity"/>
 </LinearLayout>

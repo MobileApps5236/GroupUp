@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/messageEditText"
+        android:layout_marginTop="29dp"
+        android:lines="10"
+        android:padding="10dp"
+        android:hint="Enter Your Message Here."
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/btnComment"
+        android:layout_alignParentBottom="true"
+        android:text="Create New Message"/>
+
+</RelativeLayout>
