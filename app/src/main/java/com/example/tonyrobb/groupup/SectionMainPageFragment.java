@@ -36,7 +36,6 @@ public class SectionMainPageFragment extends Fragment {
         btnDiscussionBoard = (Button) v.findViewById(R.id.button_discussion_board);
         btnGroups = (Button) v.findViewById(R.id.button_groups);
         btnClassRoster = (Button) v.findViewById(R.id.button_class_roster);
-        btnMyGroup = (Button) v.findViewById(R.id.button_my_group);
         sectionName = (TextView) v.findViewById(R.id.section_name);
 
         btnDiscussionBoard.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +108,10 @@ public class SectionMainPageFragment extends Fragment {
         databaseClasses.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println(dataSnapshot.child(classId).getValue(Class.class).getClassName());
-                className = dataSnapshot.child(classId).getValue(Class.class).getClassName();
-                sectionName.setText(className);
-
+                if(classId != null) {
+                    className = dataSnapshot.child(classId).getValue(Class.class).getClassName();
+                    sectionName.setText(className);
+                }
             }
 
             @Override

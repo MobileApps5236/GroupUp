@@ -16,7 +16,7 @@
             android:id="@+id/section_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Section Name"
+            android:hint="My Class"
             android:padding="10dp"
             android:textAlignment="center"
             android:textColor="@android:color/background_dark"
@@ -55,18 +55,6 @@
             android:layout_marginTop="20dp"
             android:enabled="true"
             android:text="Class Roster"
-            android:textColor="@android:color/background_dark"
-            android:theme="@style/AppTheme" />
-
-        <Button
-            android:id="@+id/button_my_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="20dp"
-            android:enabled="true"
-            android:text="My Group"
             android:textColor="@android:color/background_dark"
             android:theme="@style/AppTheme" />
 
