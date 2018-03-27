@@ -136,7 +136,6 @@ public class SectionListFragment extends Fragment {
 
     private void addSection() {
         String sectionNumber = editTextAddSection.getText().toString().trim();
-        //TODO: make sure the user enters in a number
 
         if (!TextUtils.isEmpty(sectionNumber)) {
             String id = databaseSections.push().getKey();

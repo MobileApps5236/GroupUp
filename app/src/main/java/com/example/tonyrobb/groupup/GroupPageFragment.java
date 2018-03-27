@@ -3,6 +3,7 @@ package com.example.tonyrobb.groupup;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +52,12 @@ public class GroupPageFragment extends Fragment {
         btnJoinGroup = v.findViewById(R.id.btn_join_group);
         btnAddMember = v.findViewById(R.id.btn_add_member);
         btnRemoveMember = v.findViewById(R.id.btn_remove_member);
-
+        btnAddMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addUser(currentGroup);
+            }
+        });
         databaseCurrentGroup = FirebaseDatabase.getInstance().getReference("groups").child(groupId);
         databaseGroupMembers = databaseCurrentGroup.child("groupMembers");
         databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users")
@@ -80,6 +87,13 @@ public class GroupPageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 joinGroup(currentGroup, currentUser);
+            }
+        });
+
+        btnRemoveMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeUser(currentGroup);
             }
         });
 
@@ -167,12 +181,85 @@ public class GroupPageFragment extends Fragment {
         databaseCurrentGroup.child("groupMembers").child(user.getUserId()).setValue(user);
     }
 
-    private void addUser(){
+    private void addUser(final Group group){
+        final String userEmail = editUserEmail.getText().toString().trim();
 
+        if(!TextUtils.isEmpty(userEmail)){
+            DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users");
+            userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String userId = null;
+                    for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
+                        String currentEmail = userSnapshot.child("email").getValue(String.class);
+                        if(currentEmail.equals(userEmail)){
+                            userId = userSnapshot.getValue(User.class).getUserId();
+                        }
+                    }
+                    if(userId == null){
+                        Toast.makeText(getActivity(), "Email does not exist", Toast.LENGTH_SHORT).show();
+                    }else{
+                        User user = dataSnapshot.child(userId).getValue(User.class);
+                        group.setGroupMembers(null);
+                        group.setGroupOwnerUId(null);
+                        group.setSectionId(null);
+
+                        databaseCurrentUser.child("enrolledInGroup").child(group.getGroupId()).setValue(group);
+
+                        user.setBio(null);
+                        user.setSkills(null);
+                        user.setMajor(null);
+                        user.setProfilePicUrl(null);
+                        user.setSectionsEnrolledIn(null);
+                        user.setEnrolledInGroup(null);
+
+                        databaseCurrentGroup.child("groupMembers").child(user.getUserId()).setValue(user);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
-    private void removeUser(){
+    private void removeUser(final Group group){
+        final String userEmail = editUserEmail.getText().toString().trim();
 
+        if(!TextUtils.isEmpty(userEmail)){
+            DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users");
+            userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String userId = null;
+                    for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
+                        String currentEmail = userSnapshot.child("email").getValue(String.class);
+                        if(currentEmail.equals(userEmail)){
+                            userId = userSnapshot.getValue(User.class).getUserId();
+                        }
+                    }
+                    if(userId == null){
+                        Toast.makeText(getActivity(), "Email does not exist", Toast.LENGTH_SHORT).show();
+                    }else{
+                        User user = dataSnapshot.child(userId).getValue(User.class);
+                        if(!user.getEmail().equals(userEmail)) {
+                            databaseCurrentUser.child("enrolledInGroup").child(group.getGroupId()).removeValue();
+
+                            databaseCurrentGroup.child("groupMembers").child(user.getUserId()).removeValue();
+                        }else{
+                            Toast.makeText(getActivity(),"You can't delete yourself!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
 }
