@@ -70,6 +70,7 @@ public class GroupsListFragment extends Fragment {
 
                 Bundle args = new Bundle();
                 args.putString("groupId", aGroup.getGroupId());
+                args.putString("classId", classId);
                 fragment.setArguments(args);
 
                 getActivity().getSupportFragmentManager().beginTransaction()
@@ -96,7 +97,6 @@ public class GroupsListFragment extends Fragment {
                     Group group = groupSnapshot.getValue(Group.class);
                     groupList.add(group);
                 }
-                Log.i("UserID?", currentUser.getUid());
 
                 if (getActivity() != null) {
                     GroupsListAdapter adapter = new GroupsListAdapter(getActivity(), groupList);
