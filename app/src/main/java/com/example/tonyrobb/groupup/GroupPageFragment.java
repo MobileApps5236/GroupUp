@@ -23,10 +23,10 @@ import java.util.List;
 
 public class GroupPageFragment extends Fragment {
 
-    DatabaseReference databaseCurrentGroup, databaseGroupMembers;
+    DatabaseReference databaseCurrentGroup, databaseGroupMembers, databaseCurrentUser;
     Group currentGroup;
     Button btnJoinGroup, btnAddMember, btnRemoveMember;
-
+    User currentUser;
 
     ListView listViewMembers;
     List<User> userList;
@@ -53,6 +53,8 @@ public class GroupPageFragment extends Fragment {
 
         databaseCurrentGroup = FirebaseDatabase.getInstance().getReference("groups").child(groupId);
         databaseGroupMembers = databaseCurrentGroup.child("groupMembers");
+        databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         listViewMembers = (ListView) v.findViewById(R.id.listViewMembers);
         userList = new ArrayList<User>();
@@ -71,7 +73,13 @@ public class GroupPageFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, userProfileFragment, "toUserProfile")
                         .addToBackStack(null).commit();
+            }
+        });
 
+        btnJoinGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                joinGroup(currentGroup, currentUser);
             }
         });
 
@@ -125,12 +133,38 @@ public class GroupPageFragment extends Fragment {
 
             }
         });
+
+        databaseCurrentUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentUser = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
 
-    private void joinGroup(){
+    private void joinGroup(Group group, User user){
 
+        group.setGroupMembers(null);
+        group.setGroupOwnerUId(null);
+        group.setSectionId(null);
+
+        databaseCurrentUser.child("enrolledInGroup").child(group.getGroupId()).setValue(group);
+
+        user.setBio(null);
+        user.setSkills(null);
+        user.setMajor(null);
+        user.setProfilePicUrl(null);
+        user.setSectionsEnrolledIn(null);
+        user.setEnrolledInGroup(null);
+
+        databaseCurrentGroup.child("groupMembers").child(user.getUserId()).setValue(user);
     }
 
     private void addUser(){
