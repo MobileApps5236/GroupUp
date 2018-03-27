@@ -25,9 +25,11 @@ public class GroupPageFragment extends Fragment {
 
     DatabaseReference databaseCurrentGroup, databaseGroupMembers;
     Group currentGroup;
+    Button joinGroupBtn;
 
     ListView listViewMembers;
     List<User> userList;
+
 
     private EditText editUserEmail;
 
@@ -43,12 +45,17 @@ public class GroupPageFragment extends Fragment {
             classId = bundle.getString("classId");
             groupId = bundle.getString("groupId");
         }
-
         editUserEmail = v.findViewById(R.id.edit_user_email);
-        final Button btnJoinGroup = v.findViewById(R.id.btn_join_group);
-        final Button btnAddMember = v.findViewById(R.id.btn_add_member);
-        final Button btnRemoveMember = v.findViewById(R.id.btn_remove_member);
-
+        Button btnJoinGroup = v.findViewById(R.id.btn_join_group);
+        Button btnAddMember = v.findViewById(R.id.btn_add_member);
+        Button btnRemoveMember = v.findViewById(R.id.btn_remove_member);
+        if (FirebaseAuth.getInstance().getUid().equals(currentGroup.getGroupOwnerUId())){
+            btnJoinGroup.setVisibility(View.GONE);
+        } else {
+            editUserEmail.setVisibility(View.GONE);
+            btnAddMember.setVisibility(View.GONE);
+            btnRemoveMember.setVisibility(View.GONE);
+        }
         databaseCurrentGroup = FirebaseDatabase.getInstance().getReference("groups").child(groupId);
         databaseGroupMembers = databaseCurrentGroup.child("groupMembers");
 
@@ -70,14 +77,6 @@ public class GroupPageFragment extends Fragment {
                         .replace(R.id.fragment_container, userProfileFragment, "toUserProfile")
                         .addToBackStack(null).commit();
 
-                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(currentGroup.getGroupOwnerUId())){
-                    btnJoinGroup.setVisibility(View.GONE);
-                } else {
-                    editUserEmail.setVisibility(View.GONE);
-                    btnAddMember.setVisibility(View.GONE);
-                    btnRemoveMember.setVisibility(View.GONE);
-                }
-
             }
         });
 
@@ -94,7 +93,6 @@ public class GroupPageFragment extends Fragment {
 
                 userList.clear();
 
-                currentGroup = dataSnapshot.getValue(Group.class);
 
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     User user = userSnapshot.getValue(User.class);
