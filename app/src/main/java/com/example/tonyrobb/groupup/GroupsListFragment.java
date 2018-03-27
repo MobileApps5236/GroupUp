@@ -34,6 +34,7 @@ public class GroupsListFragment extends Fragment {
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     String sectionId, classId;
     EditText editAddGroupName;
+    User ownerUser;
 
     @Nullable
     @Override
@@ -112,6 +113,18 @@ public class GroupsListFragment extends Fragment {
 
             }
         });
+
+        databaseGroupOwner.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ownerUser = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("HELLO");
+            }
+        });
     }
 
     private void addGroup() {
@@ -138,6 +151,17 @@ public class GroupsListFragment extends Fragment {
 
         databaseCurrentSection.child("groupsMade").child(currentGroup.getGroupId()).setValue(currentGroup);
         databaseGroupOwner.child("enrolledInGroup").child(currentGroup.getGroupId()).setValue(currentGroup);
+
+        ownerUser.setBio(null);
+        ownerUser.setSkills(null);
+        ownerUser.setMajor(null);
+        ownerUser.setEmail(null);
+        ownerUser.setProfilePicUrl(null);
+        ownerUser.setSectionsEnrolledIn(null);
+        ownerUser.setEnrolledInGroup(null);
+
+        databaseGroups.child(currentGroup.getGroupId()).child("groupMembers")
+                .child(ownerUser.getUserId()).setValue(ownerUser);
     }
 
 }
