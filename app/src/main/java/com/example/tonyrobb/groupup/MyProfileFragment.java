@@ -2,8 +2,11 @@ package com.example.tonyrobb.groupup;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -44,6 +47,9 @@ public class MyProfileFragment extends Fragment {
     private EditText editMajor, editSkills, editBio;
     private ImageView imgPofilePicture;
 
+    ConnectivityManager connectionManager;
+    NetworkInfo activeNetwork;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,11 +68,29 @@ public class MyProfileFragment extends Fragment {
         storageRef = FirebaseStorage.getInstance().getReference();
         mProgress = new ProgressDialog(getContext());
 
-        populateFields(databaseCurrentUser);
+        connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            populateFields(databaseCurrentUser);
+        }
+
 
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 updateProfile(databaseCurrentUser);
             }
         });
@@ -141,7 +165,7 @@ public class MyProfileFragment extends Fragment {
 
     private void profilePicSelection() {
 
-        final CharSequence[] items = {"Select or Take a Photo", "Cancel"};
+        final CharSequence[] items = {"Upload a Photo", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Choose Profile Picture");
 
@@ -149,7 +173,13 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int item) {
 
-                if (items[item].equals("Select or Take a Photo")) {
+                if (items[item].equals("Upload a Photo")) {
+                    activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                    if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     getCroppedPhotoIntent();
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -193,6 +223,9 @@ public class MyProfileFragment extends Fragment {
 
                             currentUser.setProfilePicUrl(imageDownloadUrl.toString());
                             databaseCurrentUser.setValue(currentUser);
+
+                            // Get bitmap and resize it to save memory
+                            new DownloadImageTask(imgPofilePicture).execute(currentUser.getProfilePicUrl());
                         }
                     });
 

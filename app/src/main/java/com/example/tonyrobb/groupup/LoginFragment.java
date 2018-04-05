@@ -1,7 +1,10 @@
 package com.example.tonyrobb.groupup;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,11 +35,13 @@ public class LoginFragment extends Fragment {
     private Button loginBtn, btnSignUp;
     private CheckBox chkboxRememberMe;
     private EditText inputEmail, inputPassword;
-    private String email, password;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
     private FirebaseAuth auth;
+
+    ConnectivityManager connectionManager;
+    NetworkInfo activeNetwork;
 
     @Nullable
     @Override
@@ -62,13 +67,26 @@ public class LoginFragment extends Fragment {
             chkboxRememberMe.setChecked(true);
         }
 
+        connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
         // Get another instance
         auth = FirebaseAuth.getInstance();
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 CreateAccountFragment createAccountFragment = new CreateAccountFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, createAccountFragment, "nextFrag")
@@ -81,51 +99,65 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                email = inputEmail.getText().toString();
-                password = inputPassword.getText().toString();
 
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Enter email address", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Enter password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                System.out.println(email);
-                System.out.println(password);
-                // Authenticate user
-                auth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (!task.isSuccessful()) {
-                                    if (password.length() > 6) {
-                                        Toast.makeText(getActivity().getApplicationContext(), "Wrong email or password", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(getActivity().getApplicationContext(), "Password too short (under 6 characters)", Toast.LENGTH_LONG).show();
-                                    }
-                                } else {
-                                    if (chkboxRememberMe.isChecked()) {
-                                        loginPrefsEditor.putBoolean("saveLogin", true);
-                                        loginPrefsEditor.putString("email", email);
-                                        loginPrefsEditor.putString("password", password);
-                                        loginPrefsEditor.apply();
-                                    } else {
-                                        loginPrefsEditor.clear();
-                                        loginPrefsEditor.commit();
-                                    }
-
-                                    Intent intent = new Intent(getActivity().getApplicationContext(), MainMenu.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                }
-                            }
-                        });
+                login();
             }
         });
         return v;
     }
+
+    private void login() {
+
+        final String email = inputEmail.getText().toString();
+        final String password = inputPassword.getText().toString();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getActivity().getApplicationContext(), "Enter email address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(getActivity().getApplicationContext(), "Enter password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Authenticate user
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+
+                            if (password.length() >= 6) {
+                                Toast.makeText(getActivity().getApplicationContext(), "Wrong email or password", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity().getApplicationContext(), "Password too short (under 6 characters)", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            if (chkboxRememberMe.isChecked()) {
+                                loginPrefsEditor.putBoolean("saveLogin", true);
+                                loginPrefsEditor.putString("email", email);
+                                loginPrefsEditor.putString("password", password);
+                                loginPrefsEditor.apply();
+                            } else {
+                                loginPrefsEditor.clear();
+                                loginPrefsEditor.commit();
+                            }
+
+                            Intent intent = new Intent(getActivity().getApplicationContext(), MainMenu.class);
+                            startActivity(intent);
+                            getActivity().finish();
+                        }
+                    }
+                });
+    }
+
 }

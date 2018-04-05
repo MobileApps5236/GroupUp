@@ -1,5 +1,8 @@
 package com.example.tonyrobb.groupup;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +32,9 @@ public class ClassRosterFragment extends Fragment {
     ListView listViewUsers;
     List<User> userList;
 
+    ConnectivityManager connectionManager;
+    NetworkInfo activeNetwork;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,6 +48,9 @@ public class ClassRosterFragment extends Fragment {
             sectionId = bundle.getString("sectionId");
         }
 
+        connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         databaseEnrolledUsers = FirebaseDatabase.getInstance().getReference("sections")
                 .child(classId).child(sectionId).child("enrolledUsers");
 
@@ -50,6 +60,13 @@ public class ClassRosterFragment extends Fragment {
         listViewUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 User aUser = userList.get(i);
                 UserProfileFragment userProfileFragment = new UserProfileFragment();
@@ -71,6 +88,13 @@ public class ClassRosterFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         databaseEnrolledUsers.addValueEventListener(new ValueEventListener() {
             @Override

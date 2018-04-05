@@ -1,5 +1,8 @@
 package com.example.tonyrobb.groupup;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,15 +23,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tonyrobb on 3/20/18.
- */
-
 public class ClassListFragment extends Fragment {
 
     DatabaseReference databaseClasses;
     ListView listViewClasses;
     List<Class> classList;
+    ConnectivityManager connectionManager;
+    NetworkInfo activeNetwork;
 
     @Nullable
     @Override
@@ -37,9 +39,20 @@ public class ClassListFragment extends Fragment {
         listViewClasses = (ListView) v.findViewById(R.id.listViewClasses);
         classList = new ArrayList<>();
 
+        connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         listViewClasses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Class aClass = classList.get(i);
                 SectionListFragment fragment = new SectionListFragment();
                 Bundle args = new Bundle();
@@ -59,6 +72,14 @@ public class ClassListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         databaseClasses.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

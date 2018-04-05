@@ -1,6 +1,9 @@
 package com.example.tonyrobb.groupup;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +32,7 @@ public class UserProfileFragment extends Fragment {
     private TextView txtName, txtEmail;
     private EditText editMajor, editSkills, editBio;
     private ImageView imgPofilePicture;
-    Button buttonUpdate;
+    private Button buttonUpdate;
 
     @Nullable
     @Override
@@ -52,12 +56,22 @@ public class UserProfileFragment extends Fragment {
 
         disableClickableFields();
 
-        if (userId != null) {
-            databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users")
-                    .child(userId);
-            mProgress = new ProgressDialog(getContext());
+        ConnectivityManager connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-            populateFields(databaseCurrentUser);
+        NetworkInfo activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+        } else {
+
+            if (userId != null) {
+                databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users")
+                        .child(userId);
+                mProgress = new ProgressDialog(getContext());
+
+                populateFields(databaseCurrentUser);
+            }
         }
 
         return v;

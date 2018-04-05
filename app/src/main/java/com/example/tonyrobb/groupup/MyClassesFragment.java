@@ -1,5 +1,8 @@
 package com.example.tonyrobb.groupup;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +39,8 @@ public class MyClassesFragment extends Fragment {
     List<Section> sectionList;
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     String sectionId;
+    ConnectivityManager connectionManager;
+    NetworkInfo activeNetwork;
 
     @Nullable
     @Override
@@ -44,9 +50,20 @@ public class MyClassesFragment extends Fragment {
         listViewSections = (ListView) v.findViewById(R.id.listViewSections);
         sectionList = new ArrayList<Section>();
 
+        connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         listViewSections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Section aSection = sectionList.get(i);
                 SectionMainPageFragment fragment = new SectionMainPageFragment();
                 Bundle args = new Bundle();
@@ -64,6 +81,13 @@ public class MyClassesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         databaseSections.addValueEventListener(new ValueEventListener() {
             @Override

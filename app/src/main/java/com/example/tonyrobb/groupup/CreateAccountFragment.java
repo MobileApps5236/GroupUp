@@ -1,5 +1,8 @@
 package com.example.tonyrobb.groupup;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,6 +36,7 @@ public class CreateAccountFragment extends Fragment {
 
     private FirebaseAuth auth;
     private DatabaseReference databaseUsers;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,51 +56,70 @@ public class CreateAccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                final String email = inputEmail.getText().toString().trim();
-                final String firstName = inputFirstName.getText().toString().trim();
-                final String lastName = inputLastName.getText().toString().trim();
-                String password = inputPassword.getText().toString().trim();
-                String confirmPassword = inputConfirmPassword.getText().toString().trim();
-
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (!password.equals(confirmPassword)){
-                    Toast.makeText(getActivity().getApplicationContext(), "Password does not match", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //This is where a user is created
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Authentication failed: " + task.getException(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            addUser(email, firstName, lastName, chkboxIsProfessor.isChecked());
-
-                            Toast.makeText(getActivity(), "User successfully created ", Toast.LENGTH_SHORT).show();
-                            auth.signOut();
-                            getFragmentManager().popBackStackImmediate();
-                        }
-                    }
-                });
+                signUp();
             }
         });
         return v;
     }
 
-    private void addUser(String email, String firstName, String lastName, boolean isProf){
+    private void signUp() {
+
+        final String email = inputEmail.getText().toString().trim();
+        final String firstName = inputFirstName.getText().toString().trim();
+        final String lastName = inputLastName.getText().toString().trim();
+        String password = inputPassword.getText().toString().trim();
+        String confirmPassword = inputConfirmPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getActivity().getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+
+            Toast.makeText(getActivity().getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (password.length() < 6) {
+
+            Toast.makeText(getActivity().getApplicationContext(), "Password too short (under 6 characters)", Toast.LENGTH_LONG).show();
+            return;
+        } else if (!password.equals(confirmPassword)) {
+
+            Toast.makeText(getActivity().getApplicationContext(), "Password does not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ConnectivityManager connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //This is where a user is created
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                if (!task.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Authentication failed: " + task.getException(), Toast.LENGTH_SHORT).show();
+                } else {
+                    addUser(email, firstName, lastName, chkboxIsProfessor.isChecked());
+
+                    Toast.makeText(getActivity(), "User successfully created ", Toast.LENGTH_SHORT).show();
+                    auth.signOut();
+                    getFragmentManager().popBackStackImmediate();
+                }
+            }
+        });
+    }
+
+    private void addUser(String email, String firstName, String lastName, boolean isProf) {
         String userId = auth.getCurrentUser().getUid();
-        HashMap<String,Section> sectionsList = new HashMap<>();
+        HashMap<String, Section> sectionsList = new HashMap<>();
         HashMap<String, Group> enrolledInGroup = new HashMap<>();
 
         User user = new User(userId, email, firstName, lastName, isProf, sectionsList, enrolledInGroup);

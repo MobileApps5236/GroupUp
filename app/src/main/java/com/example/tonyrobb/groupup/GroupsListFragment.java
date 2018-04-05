@@ -1,5 +1,8 @@
 package com.example.tonyrobb.groupup;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,6 +39,9 @@ public class GroupsListFragment extends Fragment {
     EditText editAddGroupName;
     User ownerUser;
 
+    ConnectivityManager connectionManager;
+    NetworkInfo activeNetwork;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,6 +52,9 @@ public class GroupsListFragment extends Fragment {
             classId = bundle.getString("classId");
             sectionId = bundle.getString("sectionId");
         }
+
+        connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         editAddGroupName = v.findViewById(R.id.editAddGroupName);
         Button buttonAddGroup = v.findViewById(R.id.btnAddGroup);
@@ -69,6 +78,14 @@ public class GroupsListFragment extends Fragment {
         listViewGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Group aGroup = groupList.get(i);
                 GroupPageFragment fragment = new GroupPageFragment();
 
@@ -90,6 +107,13 @@ public class GroupsListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         databaseGroups.addValueEventListener(new ValueEventListener() {
             @Override
@@ -131,6 +155,14 @@ public class GroupsListFragment extends Fragment {
         String groupName = editAddGroupName.getText().toString().trim();
 
         if (!TextUtils.isEmpty(groupName)) {
+
+            activeNetwork = connectionManager.getActiveNetworkInfo();
+
+            if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String id = databaseGroups.push().getKey();
             HashMap<String, User> groupMembers = new HashMap<>();
 

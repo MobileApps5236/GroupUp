@@ -1,5 +1,8 @@
 package com.example.tonyrobb.groupup;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,10 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tonyrobb on 3/26/18.
- */
-
 public class MessageListFragment extends Fragment {
     TextView subjectTxt;
     TextView authorTxt;
@@ -34,6 +34,10 @@ public class MessageListFragment extends Fragment {
     FirebaseAuth auth;
     List<Message> messageList;
     DatabaseReference messagesReference;
+
+    ConnectivityManager connectionManager;
+    NetworkInfo activeNetwork;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,9 +51,21 @@ public class MessageListFragment extends Fragment {
         threadId = getArguments().getString("threadId");
         messageList = new ArrayList<>();
         messagesReference = FirebaseDatabase.getInstance().getReference("messages").child(threadId);
+
+        connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         authorTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 UserProfileFragment fragment = new UserProfileFragment();
                 Bundle args = new Bundle();
                 args.putString("userId", getArguments().getString("threadCreatorId"));
@@ -62,6 +78,14 @@ public class MessageListFragment extends Fragment {
         createMessageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 CreateMessageDialog dialog = new CreateMessageDialog(getActivity(), threadId, auth.getUid());
                 dialog.show();
             }
@@ -72,6 +96,14 @@ public class MessageListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         messagesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

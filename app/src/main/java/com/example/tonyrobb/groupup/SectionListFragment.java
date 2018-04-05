@@ -1,7 +1,10 @@
 package com.example.tonyrobb.groupup;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,10 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by tonyrobb on 3/20/18.
- */
-
 public class SectionListFragment extends Fragment {
 
     DatabaseReference databaseSections;
@@ -40,6 +39,9 @@ public class SectionListFragment extends Fragment {
     boolean isProf;
     int classNum;
     List<Section> sectionList;
+
+    ConnectivityManager connectionManager;
+    NetworkInfo activeNetwork;
 
     DatabaseReference user;
     User enrolledUser;
@@ -56,6 +58,10 @@ public class SectionListFragment extends Fragment {
         sectionList = new ArrayList<Section>();
         auth = FirebaseAuth.getInstance();
         user = FirebaseDatabase.getInstance().getReference("users").child(auth.getUid());
+
+        connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         btnAddSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +72,14 @@ public class SectionListFragment extends Fragment {
         listViewSections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 final int pos = i;
                 builder.setMessage("Do you want to enroll in section " + sectionList.get(i).getSectionNumber() + "?")
@@ -96,6 +110,14 @@ public class SectionListFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         dept = getArguments().getString("dept");
         classNum = getArguments().getInt("classNum");
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         user.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -140,6 +162,14 @@ public class SectionListFragment extends Fragment {
         String sectionNumber = editTextAddSection.getText().toString().trim();
 
         if (!TextUtils.isEmpty(sectionNumber)) {
+
+            activeNetwork = connectionManager.getActiveNetworkInfo();
+
+            if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String id = databaseSections.push().getKey();
             HashMap<String, User> enrolledUsers = new HashMap<>();
             HashMap<String, Group> groupsMade = new HashMap<>();

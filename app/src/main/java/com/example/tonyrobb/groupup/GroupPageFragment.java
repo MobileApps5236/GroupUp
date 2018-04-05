@@ -1,5 +1,8 @@
 package com.example.tonyrobb.groupup;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,6 +36,8 @@ public class GroupPageFragment extends Fragment {
     ListView listViewMembers;
     List<User> userList;
 
+    ConnectivityManager connectionManager;
+    NetworkInfo activeNetwork;
 
     private EditText editUserEmail;
 
@@ -48,6 +53,10 @@ public class GroupPageFragment extends Fragment {
             classId = bundle.getString("classId");
             groupId = bundle.getString("groupId");
         }
+
+        connectionManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         editUserEmail = v.findViewById(R.id.edit_user_email);
         btnJoinGroup = v.findViewById(R.id.btn_join_group);
         btnAddMember = v.findViewById(R.id.btn_add_member);
@@ -70,6 +79,13 @@ public class GroupPageFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 User aUser = userList.get(i);
                 UserProfileFragment userProfileFragment = new UserProfileFragment();
 
@@ -86,6 +102,13 @@ public class GroupPageFragment extends Fragment {
         btnJoinGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                activeNetwork = connectionManager.getActiveNetworkInfo();
+
+                if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 joinGroup(currentGroup, currentUser);
             }
         });
@@ -103,6 +126,13 @@ public class GroupPageFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        activeNetwork = connectionManager.getActiveNetworkInfo();
+
+        if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+            Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         databaseGroupMembers.addValueEventListener(new ValueEventListener() {
             @Override
@@ -222,6 +252,8 @@ public class GroupPageFragment extends Fragment {
 
                 }
             });
+        } else {
+            Toast.makeText(getActivity(),"Enter an email address", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -229,6 +261,14 @@ public class GroupPageFragment extends Fragment {
         final String userEmail = editUserEmail.getText().toString().trim();
 
         if(!TextUtils.isEmpty(userEmail)){
+
+            activeNetwork = connectionManager.getActiveNetworkInfo();
+
+            if (!(activeNetwork != null && activeNetwork.isConnectedOrConnecting())) {
+                Toast.makeText(getActivity().getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users");
             userReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -259,6 +299,8 @@ public class GroupPageFragment extends Fragment {
 
                 }
             });
+        } else {
+            Toast.makeText(getActivity(),"Enter an email address", Toast.LENGTH_SHORT).show();
         }
     }
 
