@@ -139,6 +139,7 @@ public class MyProfileFragment extends Fragment {
         });
     }
 
+
     private void updateProfile(DatabaseReference databaseCurrentUser) {
 
         String major = editMajor.getText().toString().trim();
@@ -189,12 +190,30 @@ public class MyProfileFragment extends Fragment {
         builder.show();
     }
 
-    private void getCroppedPhotoIntent() {
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        databaseCurrentUser = null;
+        storageRef = null;
+        currentUser = null;
+        imageUri = null;
+        mProgress = null;
+        txtEmail = null;
+        txtName = null;
+        editBio = null;
+        editMajor = null;
+        editSkills = null;
+        imgPofilePicture = null;
+        connectionManager = null;
+        activeNetwork = null;
+    }
 
+    private void getCroppedPhotoIntent() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setAspectRatio(1,1)
                 .start(getContext(), this);
+
     }
 
     @Override

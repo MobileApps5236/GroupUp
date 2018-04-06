@@ -85,5 +85,13 @@ public class MainMenuFragment extends Fragment {
 
         return v;
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        btnClasses = null;
+        btnEnroll = null;
+        btnProfile = null;
+    }
 }
 
