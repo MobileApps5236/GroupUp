@@ -28,10 +28,10 @@ import java.util.List;
 
 public class GroupPageFragment extends Fragment {
 
-    DatabaseReference databaseCurrentGroup, databaseGroupMembers, databaseCurrentUser;
+    DatabaseReference databaseCurrentGroup, databaseGroupMembers, databaseUsers, databaseCurrentUser;
     Group currentGroup;
     Button btnJoinGroup, btnAddMember, btnRemoveMember;
-    User currentUser;
+    User currentUser, currentGroupOwner;
 
     ListView listViewMembers;
     List<User> userList;
@@ -61,16 +61,11 @@ public class GroupPageFragment extends Fragment {
         btnJoinGroup = v.findViewById(R.id.btn_join_group);
         btnAddMember = v.findViewById(R.id.btn_add_member);
         btnRemoveMember = v.findViewById(R.id.btn_remove_member);
-        btnAddMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addUser(currentGroup);
-            }
-        });
+
         databaseCurrentGroup = FirebaseDatabase.getInstance().getReference("groups").child(groupId);
         databaseGroupMembers = databaseCurrentGroup.child("groupMembers");
-        databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        databaseUsers = FirebaseDatabase.getInstance().getReference("users");
+        databaseCurrentUser = databaseUsers.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         listViewMembers = (ListView) v.findViewById(R.id.listViewMembers);
         userList = new ArrayList<User>();
@@ -113,10 +108,19 @@ public class GroupPageFragment extends Fragment {
             }
         });
 
+        btnAddMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userEmail = editUserEmail.getText().toString().trim();
+                addUser(currentGroup, userEmail);
+            }
+        });
+
         btnRemoveMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeUser(currentGroup);
+                String userEmail = editUserEmail.getText().toString().trim();
+                removeUser(currentGroup, userEmail);
             }
         });
 
@@ -178,6 +182,19 @@ public class GroupPageFragment extends Fragment {
             }
         });
 
+        databaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentGroupOwner = dataSnapshot.child(currentGroup.getGroupOwnerUId())
+                        .getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         databaseCurrentUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -211,8 +228,7 @@ public class GroupPageFragment extends Fragment {
         databaseCurrentGroup.child("groupMembers").child(user.getUserId()).setValue(user);
     }
 
-    private void addUser(final Group group){
-        final String userEmail = editUserEmail.getText().toString().trim();
+    private void addUser(final Group group, final String userEmail){
 
         if(!TextUtils.isEmpty(userEmail)){
             DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users");
@@ -220,21 +236,31 @@ public class GroupPageFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String userId = null;
+                    User newMember = null;
+
                     for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
                         String currentEmail = userSnapshot.child("email").getValue(String.class);
                         if(currentEmail.equals(userEmail)){
-                            userId = userSnapshot.getValue(User.class).getUserId();
+                            newMember = userSnapshot.getValue(User.class);
+                            userId = newMember.getUserId();
                         }
                     }
-                    if(userId == null){
+                    if(userId == null) {
+
                         Toast.makeText(getActivity(), "Email does not exist", Toast.LENGTH_SHORT).show();
-                    }else{
+                    } else if (!newMember.getSectionsEnrolledIn().containsKey(group.getSectionId())) {
+
+                        Toast.makeText(getActivity(),"User not enrolled in this section", Toast.LENGTH_SHORT).show();
+                    } else {
+
                         User user = dataSnapshot.child(userId).getValue(User.class);
                         group.setGroupMembers(null);
                         group.setGroupOwnerUId(null);
                         group.setSectionId(null);
 
-                        databaseCurrentUser.child("enrolledInGroup").child(group.getGroupId()).setValue(group);
+                        DatabaseReference databaseAddedUser = FirebaseDatabase.getInstance()
+                                .getReference("users").child(userId);
+                        databaseAddedUser.child("enrolledInGroup").child(group.getGroupId()).setValue(group);
 
                         user.setBio(null);
                         user.setSkills(null);
@@ -244,6 +270,7 @@ public class GroupPageFragment extends Fragment {
                         user.setEnrolledInGroup(null);
 
                         databaseCurrentGroup.child("groupMembers").child(user.getUserId()).setValue(user);
+                        Toast.makeText(getActivity(),"User Added", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -257,8 +284,7 @@ public class GroupPageFragment extends Fragment {
         }
     }
 
-    private void removeUser(final Group group){
-        final String userEmail = editUserEmail.getText().toString().trim();
+    private void removeUser(final Group group, final String userEmail){
 
         if(!TextUtils.isEmpty(userEmail)){
 
@@ -283,11 +309,14 @@ public class GroupPageFragment extends Fragment {
                     if(userId == null){
                         Toast.makeText(getActivity(), "Email does not exist", Toast.LENGTH_SHORT).show();
                     }else{
-                        User user = dataSnapshot.child(userId).getValue(User.class);
-                        if(!user.getEmail().equals(userEmail)) {
-                            databaseCurrentUser.child("enrolledInGroup").child(group.getGroupId()).removeValue();
+                        if(!currentGroupOwner.getEmail().equals(userEmail)) {
 
-                            databaseCurrentGroup.child("groupMembers").child(user.getUserId()).removeValue();
+                            DatabaseReference databaseRemovedUser = FirebaseDatabase.getInstance()
+                                    .getReference("users").child(userId);
+                            databaseRemovedUser.child("enrolledInGroup").child(group.getGroupId()).removeValue();
+
+                            databaseCurrentGroup.child("groupMembers").child(userId).removeValue();
+                            Toast.makeText(getActivity(),"User Removed", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getActivity(),"You can't delete yourself!", Toast.LENGTH_SHORT).show();
                         }

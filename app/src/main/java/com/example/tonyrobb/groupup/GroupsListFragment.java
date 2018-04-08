@@ -123,7 +123,9 @@ public class GroupsListFragment extends Fragment {
 
                 for(DataSnapshot groupSnapshot : dataSnapshot.getChildren()){
                     Group group = groupSnapshot.getValue(Group.class);
-                    groupList.add(group);
+                    if (group.getSectionId().equals(sectionId)){
+                        groupList.add(group);
+                    }
                 }
 
                 if (getActivity() != null) {
