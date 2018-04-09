@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.security.Key;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -39,6 +45,7 @@ public class LoginFragment extends Fragment {
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
     private FirebaseAuth auth;
+    private static final String KEY = "2Icgi778begEFK89";
 
     ConnectivityManager connectionManager;
     NetworkInfo activeNetwork;
@@ -63,7 +70,13 @@ public class LoginFragment extends Fragment {
         saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin) {
             inputEmail.setText(loginPreferences.getString("email", ""));
-            inputPassword.setText(loginPreferences.getString("password", ""));
+            try {
+                String decryptedPassword = decrypt(loginPreferences.getString("password", ""));
+                inputPassword.setText(decryptedPassword);
+            } catch (Exception e) {
+
+            }
+            //inputPassword.setText(loginPreferences.getString("password", ""));
             chkboxRememberMe.setChecked(true);
         }
 
@@ -145,7 +158,12 @@ public class LoginFragment extends Fragment {
                             if (chkboxRememberMe.isChecked()) {
                                 loginPrefsEditor.putBoolean("saveLogin", true);
                                 loginPrefsEditor.putString("email", email);
-                                loginPrefsEditor.putString("password", password);
+                                try {
+                                    String encryptedPassword = encrypt(password);
+                                    loginPrefsEditor.putString("password", encryptedPassword);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 loginPrefsEditor.apply();
                             } else {
                                 loginPrefsEditor.clear();
@@ -158,6 +176,30 @@ public class LoginFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    public static String encrypt(String value) throws Exception{
+        Key key = generateKey();
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte [] encryptedyteValue = cipher.doFinal(value.getBytes("utf-8"));
+        String encryptedValue64 = Base64.encodeToString(encryptedyteValue, Base64.DEFAULT);
+        return encryptedValue64;
+    }
+
+    public static String decrypt(String value) throws Exception {
+        Key key = generateKey();
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        byte[] decryptedValue64 = Base64.decode(value, Base64.DEFAULT);
+        byte [] decryptedByteValue = cipher.doFinal(decryptedValue64);
+        String decryptedValue = new String(decryptedByteValue,"utf-8");
+        return decryptedValue;
+    }
+
+    private static Key generateKey() throws Exception {
+        Key key = new SecretKeySpec(KEY.getBytes(),"AES");
+        return key;
     }
 
 }
