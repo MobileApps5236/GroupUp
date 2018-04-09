@@ -76,7 +76,6 @@ public class LoginFragment extends Fragment {
             } catch (Exception e) {
 
             }
-            //inputPassword.setText(loginPreferences.getString("password", ""));
             chkboxRememberMe.setChecked(true);
         }
 
