@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class UserProfileFragment extends Fragment {
 
@@ -115,7 +116,7 @@ public class UserProfileFragment extends Fragment {
                 editBio.setText(currentUser.getBio());
 
                 if (!currentUser.getProfilePicUrl().equals("")){
-                    new DownloadImageTask(imgPofilePicture).execute(currentUser.getProfilePicUrl());
+                    Picasso.get().load(currentUser.getProfilePicUrl()).resize(50,50).centerCrop().into(imgPofilePicture);
                 } else {
                     imgPofilePicture.setImageDrawable(null);
                 }
@@ -128,6 +129,20 @@ public class UserProfileFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        databaseCurrentUser = null;
+        currentUser = null;
+        mProgress = null;
+        txtEmail = null;
+        txtName = null;
+        editBio = null;
+        editMajor = null;
+        editSkills = null;
+        imgPofilePicture = null;
     }
 }
 

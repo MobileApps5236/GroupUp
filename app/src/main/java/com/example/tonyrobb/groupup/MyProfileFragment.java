@@ -32,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -111,9 +112,9 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                mProgress.setTitle("Fetching Data");
-                mProgress.setMessage("Please wait....");
-                mProgress.show();
+//                mProgress.setTitle("Fetching Data");
+//                mProgress.setMessage("Please wait....");
+//                mProgress.show();
 
                 currentUser = dataSnapshot.getValue(User.class);
 
@@ -124,7 +125,7 @@ public class MyProfileFragment extends Fragment {
                 editBio.setText(currentUser.getBio());
 
                 if (!currentUser.getProfilePicUrl().equals("")){
-                    new DownloadImageTask(imgPofilePicture).execute(currentUser.getProfilePicUrl());
+                    Picasso.get().load(currentUser.getProfilePicUrl()).resize(50,50).centerCrop().into(imgPofilePicture);
                 } else {
                     imgPofilePicture.setImageDrawable(null);
                 }
@@ -244,7 +245,8 @@ public class MyProfileFragment extends Fragment {
                             databaseCurrentUser.setValue(currentUser);
 
                             // Get bitmap and resize it to save memory
-                            new DownloadImageTask(imgPofilePicture).execute(currentUser.getProfilePicUrl());
+
+                            Picasso.get().load(currentUser.getProfilePicUrl()).resize(50,50).centerCrop().into(imgPofilePicture);
                         }
                     });
 
