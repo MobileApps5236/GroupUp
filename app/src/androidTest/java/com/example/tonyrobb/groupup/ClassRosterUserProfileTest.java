@@ -91,7 +91,7 @@ public class ClassRosterUserProfileTest {
         appCompatButton.perform(click());
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -147,8 +147,14 @@ public class ClassRosterUserProfileTest {
                         childAtPosition(
                                 withClassName(is("android.widget.LinearLayout")),
                                 1)))
-                .atPosition(3);
+                .atPosition(5);
         linearLayout2.perform(click());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.txt_name), withText("Tanzim Khan"),
