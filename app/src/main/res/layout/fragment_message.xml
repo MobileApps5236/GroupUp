@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "Thread Subject"
-        android:id="@+id/subjectTxt"/>
-    <ListView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listViewThreads"
-        />
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/subjectTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thread Subject" />
+
+        <ListView
+            android:id="@+id/listViewThreads"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</ScrollView>
