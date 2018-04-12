@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <EditText
+        android:id="@+id/createThreadSubject"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:hint="Enter Thread Subject Here!" />
 
-        <EditText
-            android:id="@+id/createThreadSubject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Thread Subject Here!" />
+    <Button
+        android:id="@+id/createThreadBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create A Thread" />
 
-        <Button
-            android:id="@+id/createThreadBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Create A Thread" />
-
-        <ListView
-            android:id="@+id/threadList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-</ScrollView>
+    <ListView
+        android:id="@+id/threadList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
