@@ -116,7 +116,7 @@ public class UserProfileFragment extends Fragment {
                 editBio.setText(currentUser.getBio());
 
                 if (!currentUser.getProfilePicUrl().equals("")){
-                    Picasso.get().load(currentUser.getProfilePicUrl()).resize(50,50).centerCrop().into(imgPofilePicture);
+                    Picasso.get().load(currentUser.getProfilePicUrl()).resize(120,120).centerCrop().into(imgPofilePicture);
                 } else {
                     imgPofilePicture.setImageDrawable(null);
                 }

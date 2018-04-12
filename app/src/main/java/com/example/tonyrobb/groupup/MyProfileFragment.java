@@ -125,7 +125,7 @@ public class MyProfileFragment extends Fragment {
                 editBio.setText(currentUser.getBio());
 
                 if (!currentUser.getProfilePicUrl().equals("")){
-                    Picasso.get().load(currentUser.getProfilePicUrl()).resize(50,50).centerCrop().into(imgPofilePicture);
+                    Picasso.get().load(currentUser.getProfilePicUrl()).resize(120,120).centerCrop().into(imgPofilePicture);
                 } else {
                     imgPofilePicture.setImageDrawable(null);
                 }
@@ -246,7 +246,7 @@ public class MyProfileFragment extends Fragment {
 
                             // Get bitmap and resize it to save memory
 
-                            Picasso.get().load(currentUser.getProfilePicUrl()).resize(50,50).centerCrop().into(imgPofilePicture);
+                            Picasso.get().load(currentUser.getProfilePicUrl()).resize(120,120).centerCrop().into(imgPofilePicture);
                         }
                     });
 
