@@ -21,15 +21,18 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SignUpConfirmPasswordTest {
+public class UI_Test1_SignUpConfirmPassword {
 
     @Rule
     public ActivityTestRule<Login> mActivityTestRule = new ActivityTestRule<>(Login.class);
@@ -47,11 +50,10 @@ public class SignUpConfirmPasswordTest {
                 allOf(withId(R.id.btnCreateAccount), withText("Create A New Account"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
-                                5),
-                        isDisplayed()));
-        appCompatButton.perform(click());
+                                5)));
+        appCompatButton.perform(scrollTo(), click());
 
         try {
             Thread.sleep(1000);
@@ -63,7 +65,7 @@ public class SignUpConfirmPasswordTest {
                 allOf(withId(R.id.email),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 1),
                         isDisplayed()));
@@ -79,7 +81,7 @@ public class SignUpConfirmPasswordTest {
                 allOf(withId(R.id.first_name),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 2),
                         isDisplayed()));
@@ -95,7 +97,7 @@ public class SignUpConfirmPasswordTest {
                 allOf(withId(R.id.last_name),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 3),
                         isDisplayed()));
@@ -111,7 +113,7 @@ public class SignUpConfirmPasswordTest {
                 allOf(withId(R.id.password),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 4),
                         isDisplayed()));
@@ -127,21 +129,33 @@ public class SignUpConfirmPasswordTest {
                 allOf(withId(R.id.sign_up_button), withText("Sign Up"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 7),
                         isDisplayed()));
         appCompatButton2.perform(click());
 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ViewInteraction textView = onView(
                 allOf(withId(R.id.title), withText("Sign Up"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 0),
                         isDisplayed()));
         textView.check(matches(withText("Sign Up")));
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Matcher<View> childAtPosition(

@@ -23,6 +23,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -34,7 +35,7 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class ClassRosterUserProfileTest {
+public class UI_Test3_ClassRosterUserProfile {
 
     @Rule
     public ActivityTestRule<Login> mActivityTestRule = new ActivityTestRule<>(Login.class);
@@ -52,7 +53,7 @@ public class ClassRosterUserProfileTest {
                 allOf(withId(R.id.username),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 1),
                         isDisplayed()));
@@ -68,7 +69,7 @@ public class ClassRosterUserProfileTest {
                 allOf(withId(R.id.password),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 2),
                         isDisplayed()));
@@ -84,11 +85,10 @@ public class ClassRosterUserProfileTest {
                 allOf(withId(R.id.btnLogin), withText("Login"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
-                                4),
-                        isDisplayed()));
-        appCompatButton.perform(click());
+                                4)));
+        appCompatButton.perform(scrollTo(), click());
 
         try {
             Thread.sleep(1500);
@@ -100,14 +100,13 @@ public class ClassRosterUserProfileTest {
                 allOf(withId(R.id.classes_button), withText("My Classes and Groups"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
-                                1),
-                        isDisplayed()));
-        appCompatButton2.perform(click());
+                                1)));
+        appCompatButton2.perform(scrollTo(), click());
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -130,11 +129,10 @@ public class ClassRosterUserProfileTest {
                 allOf(withId(R.id.button_class_roster), withText("Class Roster"),
                         childAtPosition(
                                 childAtPosition(
-                                        withClassName(is("android.widget.FrameLayout")),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
-                                3),
-                        isDisplayed()));
-        appCompatButton3.perform(click());
+                                3)));
+        appCompatButton3.perform(scrollTo(), click());
 
         try {
             Thread.sleep(1000);
@@ -151,7 +149,7 @@ public class ClassRosterUserProfileTest {
         linearLayout2.perform(click());
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -170,12 +168,17 @@ public class ClassRosterUserProfileTest {
                 allOf(withId(R.id.txt_email), withText("khan.498@osu.edu"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 2),
                         isDisplayed()));
         textView2.check(matches(withText("khan.498@osu.edu")));
 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Matcher<View> childAtPosition(
