@@ -59,11 +59,11 @@ public class LoginFragment extends Fragment {
         // If user is not logged in then continue as normal
         Log.v("Login", "onCreate triggered");
 
-        loginBtn = (Button) v.findViewById(R.id.btnLogin);
-        btnSignUp = (Button) v.findViewById(R.id.btnCreateAccount);
-        chkboxRememberMe = (CheckBox) v.findViewById(R.id.chkboxRemember);
-        inputEmail = (EditText) v.findViewById(R.id.username);
-        inputPassword = (EditText) v.findViewById(R.id.password);
+        loginBtn = v.findViewById(R.id.btnLogin);
+        btnSignUp = v.findViewById(R.id.btnCreateAccount);
+        chkboxRememberMe = v.findViewById(R.id.chkboxRemember);
+        inputEmail = v.findViewById(R.id.username);
+        inputPassword = v.findViewById(R.id.password);
         loginPreferences = this.getActivity().getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
 

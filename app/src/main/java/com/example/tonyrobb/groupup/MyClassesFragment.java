@@ -34,11 +34,8 @@ public class MyClassesFragment extends Fragment {
 
     DatabaseReference databaseSections;
     ListView listViewSections;
-    String dept;
-    int classNum;
     List<Section> sectionList;
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-    String sectionId;
     ConnectivityManager connectionManager;
     NetworkInfo activeNetwork;
 
@@ -47,7 +44,7 @@ public class MyClassesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_my_classes, container, false);
         databaseSections = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).child("sectionsEnrolledIn");
-        listViewSections = (ListView) v.findViewById(R.id.listViewSections);
+        listViewSections = v.findViewById(R.id.listViewSections);
         sectionList = new ArrayList<Section>();
 
         connectionManager =

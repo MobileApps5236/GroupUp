@@ -36,7 +36,7 @@ public class ClassListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_class_list, container, false);
         databaseClasses = FirebaseDatabase.getInstance().getReference("classes");
-        listViewClasses = (ListView) v.findViewById(R.id.listViewClasses);
+        listViewClasses = v.findViewById(R.id.listViewClasses);
         classList = new ArrayList<>();
 
         connectionManager =

@@ -1,6 +1,5 @@
 package com.example.tonyrobb.groupup;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -28,7 +27,6 @@ public class UserProfileFragment extends Fragment {
 
     DatabaseReference databaseCurrentUser;
     User currentUser;
-    ProgressDialog mProgress;
 
     private TextView txtName, txtEmail;
     private EditText editMajor, editSkills, editBio;
@@ -47,13 +45,13 @@ public class UserProfileFragment extends Fragment {
             userId = bundle.getString("userId");
         }
 
-        txtName = (TextView) v.findViewById(R.id.txt_name);
-        txtEmail = (TextView) v.findViewById(R.id.txt_email);
-        editMajor = (EditText) v.findViewById(R.id.edit_major);
-        editSkills = (EditText) v.findViewById(R.id.edit_skills);
-        editBio = (EditText) v.findViewById(R.id.edit_bio);
-        imgPofilePicture = (ImageView) v.findViewById(R.id.profile_pic);
-        buttonUpdate = (Button) v.findViewById(R.id.button_update);
+        txtName = v.findViewById(R.id.txt_name);
+        txtEmail = v.findViewById(R.id.txt_email);
+        editMajor = v.findViewById(R.id.edit_major);
+        editSkills = v.findViewById(R.id.edit_skills);
+        editBio = v.findViewById(R.id.edit_bio);
+        imgPofilePicture = v.findViewById(R.id.profile_pic);
+        buttonUpdate = v.findViewById(R.id.button_update);
 
         disableClickableFields();
 
@@ -69,7 +67,6 @@ public class UserProfileFragment extends Fragment {
             if (userId != null) {
                 databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users")
                         .child(userId);
-                mProgress = new ProgressDialog(getContext());
 
                 populateFields(databaseCurrentUser);
             }
@@ -103,25 +100,26 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                mProgress.setTitle("Fetching Data");
-                mProgress.setMessage("Please wait....");
-                mProgress.show();
-
                 currentUser = dataSnapshot.getValue(User.class);
 
-                txtName.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
-                txtEmail.setText(currentUser.getEmail());
-                editMajor.setText(currentUser.getMajor());
-                editSkills.setText(currentUser.getSkills());
-                editBio.setText(currentUser.getBio());
+                if (txtName != null)
+                    txtName.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+                if (txtEmail != null)
+                    txtEmail.setText(currentUser.getEmail());
+                if (editMajor != null)
+                    editMajor.setText(currentUser.getMajor());
+                if (editSkills != null)
+                    editSkills.setText(currentUser.getSkills());
+                if (editBio != null)
+                    editBio.setText(currentUser.getBio());
 
-                if (!currentUser.getProfilePicUrl().equals("")){
-                    Picasso.get().load(currentUser.getProfilePicUrl()).resize(120,120).centerCrop().into(imgPofilePicture);
-                } else {
-                    imgPofilePicture.setImageDrawable(null);
+                if (imgPofilePicture != null) {
+                    if (!currentUser.getProfilePicUrl().equals("")) {
+                        Picasso.get().load(currentUser.getProfilePicUrl()).resize(120, 120).centerCrop().into(imgPofilePicture);
+                    } else {
+                        imgPofilePicture.setImageDrawable(null);
+                    }
                 }
-
-                mProgress.dismiss();
             }
 
             @Override
@@ -134,9 +132,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        databaseCurrentUser = null;
-        currentUser = null;
-        mProgress = null;
         txtEmail = null;
         txtName = null;
         editBio = null;

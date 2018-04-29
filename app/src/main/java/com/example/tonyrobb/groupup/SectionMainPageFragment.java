@@ -43,10 +43,10 @@ public class SectionMainPageFragment extends Fragment {
         connectionManager =
                 (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        btnDiscussionBoard = (Button) v.findViewById(R.id.button_discussion_board);
-        btnGroups = (Button) v.findViewById(R.id.button_groups);
-        btnClassRoster = (Button) v.findViewById(R.id.button_class_roster);
-        sectionName = (TextView) v.findViewById(R.id.section_name);
+        btnDiscussionBoard = v.findViewById(R.id.button_discussion_board);
+        btnGroups = v.findViewById(R.id.button_groups);
+        btnClassRoster = v.findViewById(R.id.button_class_roster);
+        sectionName = v.findViewById(R.id.section_name);
 
         btnDiscussionBoard.setOnClickListener(new View.OnClickListener() {
             @Override

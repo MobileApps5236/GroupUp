@@ -29,7 +29,7 @@ public class ClassRosterAdapter extends ArrayAdapter<User> {
 
         View listViewItem = inflater.inflate(R.layout.class_roster, null, false);
 
-        TextView nameTextView = (TextView) listViewItem.findViewById(R.id.txt_name);
+        TextView nameTextView = listViewItem.findViewById(R.id.txt_name);
 
         String userName = userList.get(position).getFirstName() + " " + userList.get(position).getLastName();
         nameTextView.setText(userName);

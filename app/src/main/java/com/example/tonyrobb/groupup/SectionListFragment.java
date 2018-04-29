@@ -52,9 +52,9 @@ public class SectionListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_section_list, container, false);
         databaseSections = FirebaseDatabase.getInstance().getReference("sections").child(getArguments().getString("classId"));
-        editTextAddSection = (EditText) v.findViewById(R.id.editTextAddSection);
-        btnAddSection = (Button) v.findViewById(R.id.btnAddSection);
-        listViewSections = (ListView) v.findViewById(R.id.listViewSections);
+        editTextAddSection = v.findViewById(R.id.editTextAddSection);
+        btnAddSection = v.findViewById(R.id.btnAddSection);
+        listViewSections = v.findViewById(R.id.listViewSections);
         sectionList = new ArrayList<Section>();
         auth = FirebaseAuth.getInstance();
         user = FirebaseDatabase.getInstance().getReference("users").child(auth.getUid());

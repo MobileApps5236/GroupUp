@@ -67,7 +67,7 @@ public class GroupPageFragment extends Fragment {
         databaseUsers = FirebaseDatabase.getInstance().getReference("users");
         databaseCurrentUser = databaseUsers.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        listViewMembers = (ListView) v.findViewById(R.id.listViewMembers);
+        listViewMembers = v.findViewById(R.id.listViewMembers);
         userList = new ArrayList<User>();
 
         listViewMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {

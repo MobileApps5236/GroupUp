@@ -20,9 +20,9 @@ public class MainMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main_menu, container, false);
 
-        btnClasses = (Button) v.findViewById(R.id.classes_button);
-        btnEnroll = (Button) v.findViewById(R.id.enroll_button);
-        btnProfile = (Button) v.findViewById(R.id.profile_button);
+        btnClasses = v.findViewById(R.id.classes_button);
+        btnEnroll = v.findViewById(R.id.enroll_button);
+        btnProfile = v.findViewById(R.id.profile_button);
 
         btnClasses.setOnClickListener(new View.OnClickListener() {
             @Override

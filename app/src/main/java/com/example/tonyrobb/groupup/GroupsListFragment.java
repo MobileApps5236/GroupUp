@@ -65,7 +65,7 @@ public class GroupsListFragment extends Fragment {
         databaseGroupOwner = FirebaseDatabase.getInstance().getReference("users")
                 .child(currentUser.getUid());
 
-        listViewGroups = (ListView) v.findViewById(R.id.listViewGroups);
+        listViewGroups = v.findViewById(R.id.listViewGroups);
         groupList = new ArrayList<Group>();
 
         buttonAddGroup.setOnClickListener(new View.OnClickListener() {

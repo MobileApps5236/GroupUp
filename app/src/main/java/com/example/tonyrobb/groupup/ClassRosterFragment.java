@@ -28,7 +28,6 @@ import java.util.List;
 public class ClassRosterFragment extends Fragment {
 
     DatabaseReference databaseEnrolledUsers;
-    DatabaseReference databaseUsers;
     ListView listViewUsers;
     List<User> userList;
 

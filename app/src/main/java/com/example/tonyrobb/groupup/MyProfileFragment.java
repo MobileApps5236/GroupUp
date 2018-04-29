@@ -42,7 +42,6 @@ public class MyProfileFragment extends Fragment {
     StorageReference storageRef;
     User currentUser;
     Uri imageUri;
-    ProgressDialog mProgress;
 
     private TextView txtName, txtEmail;
     private EditText editMajor, editSkills, editBio;
@@ -56,18 +55,17 @@ public class MyProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        txtName = (TextView) v.findViewById(R.id.txt_name);
-        txtEmail = (TextView) v.findViewById(R.id.txt_email);
-        editMajor = (EditText) v.findViewById(R.id.edit_major);
-        editSkills = (EditText) v.findViewById(R.id.edit_skills);
-        editBio = (EditText) v.findViewById(R.id.edit_bio);
-        imgPofilePicture = (ImageView) v.findViewById(R.id.profile_pic);
-        Button buttonUpdate = (Button) v.findViewById(R.id.button_update);
+        txtName = v.findViewById(R.id.txt_name);
+        txtEmail = v.findViewById(R.id.txt_email);
+        editMajor = v.findViewById(R.id.edit_major);
+        editSkills = v.findViewById(R.id.edit_skills);
+        editBio = v.findViewById(R.id.edit_bio);
+        imgPofilePicture = v.findViewById(R.id.profile_pic);
+        Button buttonUpdate = v.findViewById(R.id.button_update);
 
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseCurrentUser = FirebaseDatabase.getInstance().getReference("users").child(userID);
         storageRef = FirebaseStorage.getInstance().getReference();
-        mProgress = new ProgressDialog(getContext());
 
         connectionManager =
                 (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -112,25 +110,26 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-//                mProgress.setTitle("Fetching Data");
-//                mProgress.setMessage("Please wait....");
-//                mProgress.show();
-
                 currentUser = dataSnapshot.getValue(User.class);
 
-                txtName.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
-                txtEmail.setText(currentUser.getEmail());
-                editMajor.setText(currentUser.getMajor());
-                editSkills.setText(currentUser.getSkills());
-                editBio.setText(currentUser.getBio());
+                if (txtName != null)
+                    txtName.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+                if (txtEmail != null)
+                    txtEmail.setText(currentUser.getEmail());
+                if (editMajor != null)
+                    editMajor.setText(currentUser.getMajor());
+                if (editSkills != null)
+                    editSkills.setText(currentUser.getSkills());
+                if (editBio != null)
+                    editBio.setText(currentUser.getBio());
 
-                if (!currentUser.getProfilePicUrl().equals("")){
-                    Picasso.get().load(currentUser.getProfilePicUrl()).resize(120,120).centerCrop().into(imgPofilePicture);
-                } else {
-                    imgPofilePicture.setImageDrawable(null);
+                if (imgPofilePicture != null) {
+                    if (!currentUser.getProfilePicUrl().equals("")) {
+                        Picasso.get().load(currentUser.getProfilePicUrl()).resize(120, 120).centerCrop().into(imgPofilePicture);
+                    } else {
+                        imgPofilePicture.setImageDrawable(null);
+                    }
                 }
-
-                mProgress.dismiss();
             }
 
             @Override
@@ -194,11 +193,7 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        databaseCurrentUser = null;
-        storageRef = null;
-        currentUser = null;
         imageUri = null;
-        mProgress = null;
         txtEmail = null;
         txtName = null;
         editBio = null;
@@ -229,10 +224,6 @@ public class MyProfileFragment extends Fragment {
                 imgPofilePicture.setImageURI(imageUri);
 
                 if (imageUri != null){
-                    mProgress.setTitle("Updating Profile");
-                    mProgress.setMessage("Please wait....");
-                    mProgress.show();
-
                     StorageReference childStorage = storageRef.child("User_Profile").child(imageUri.getLastPathSegment());
 
                     childStorage.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -249,8 +240,6 @@ public class MyProfileFragment extends Fragment {
                             Picasso.get().load(currentUser.getProfilePicUrl()).resize(120,120).centerCrop().into(imgPofilePicture);
                         }
                     });
-
-                    mProgress.dismiss();
                 }
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {

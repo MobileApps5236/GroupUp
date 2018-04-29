@@ -54,7 +54,7 @@ public class ForumFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         threadReference = FirebaseDatabase.getInstance().getReference("threads").child(sectionId);
 
-        subjectTxt = (EditText) v.findViewById(R.id.createThreadSubject);
+        subjectTxt = v.findViewById(R.id.createThreadSubject);
         btnCreateThread = v.findViewById(R.id.createThreadBtn);
         listViewThreads = v.findViewById(R.id.threadList);
         threadList = new ArrayList<MessageThread>();

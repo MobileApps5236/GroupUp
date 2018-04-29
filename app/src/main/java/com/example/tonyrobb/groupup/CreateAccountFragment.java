@@ -44,13 +44,13 @@ public class CreateAccountFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         databaseUsers = FirebaseDatabase.getInstance().getReference("users");
 
-        btnSignUp = (Button) v.findViewById(R.id.sign_up_button);
-        inputEmail = (EditText) v.findViewById(R.id.email);
-        inputFirstName = (EditText) v.findViewById(R.id.first_name);
-        inputLastName = (EditText) v.findViewById(R.id.last_name);
-        inputPassword = (EditText) v.findViewById(R.id.password);
-        inputConfirmPassword = (EditText) v.findViewById(R.id.confirm_password);
-        chkboxIsProfessor = (CheckBox) v.findViewById(R.id.professor_checkbox);
+        btnSignUp = v.findViewById(R.id.sign_up_button);
+        inputEmail = v.findViewById(R.id.email);
+        inputFirstName = v.findViewById(R.id.first_name);
+        inputLastName = v.findViewById(R.id.last_name);
+        inputPassword = v.findViewById(R.id.password);
+        inputConfirmPassword = v.findViewById(R.id.confirm_password);
+        chkboxIsProfessor = v.findViewById(R.id.professor_checkbox);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
